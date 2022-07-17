@@ -1,5 +1,5 @@
 use core::num;
-extern crate restaurant;
+extern crate restaurant;//自己的库
 
 fn main() {
     println!("Hello, world!");
@@ -43,6 +43,8 @@ fn main() {
 
     //组织管理
     package_test();
+    //组织管理 - 电商实训
+    package_trai_test();
 
 }
 
@@ -413,4 +415,9 @@ fn enum_match_if_test(){
 fn package_test(){
     //引入自己创建的lib
     restaurant::front_of_house::hosting::add_to_waitlist();
+}
+
+//组织管理 - 电商实训
+fn package_trai_test(){
+
 }
