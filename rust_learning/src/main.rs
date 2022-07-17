@@ -1,4 +1,5 @@
 use core::num;
+extern crate restaurant;
 
 fn main() {
     println!("Hello, world!");
@@ -39,6 +40,9 @@ fn main() {
     enum_match_option_test();////枚举 option 填补 Rust 不支持 null 引用的空白
     enum_match_other_test();//枚举 match 通配符
     enum_match_if_test();//枚举 match if
+
+    //组织管理
+    package_test();
 
 }
 
@@ -403,4 +407,10 @@ fn enum_match_if_test(){
     } else {
         println!("Not papery book");
     }
+}
+
+//组织管理
+fn package_test(){
+    //引入自己创建的lib
+    restaurant::front_of_house::hosting::add_to_waitlist();
 }
