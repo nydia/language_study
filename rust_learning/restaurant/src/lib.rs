@@ -10,6 +10,10 @@
          └── take_payment
   
  */
+
+mod gateway;
+pub use crate::gateway::order;
+
 pub mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {
@@ -20,18 +24,16 @@ pub mod front_of_house {
     }
 
     pub mod serving {
-        pub fn take_order() {}
+        pub fn take_order() -> String{
+            let order_id = order::create_order();
+            order_id
+        }
 
         pub fn serve_order() {}
 
         pub fn take_payment() {}
     }
 }
-
-fn main() {
-    front_of_house::hosting::add_to_waitlist();
-}
-
 
 #[cfg(test)]
 mod tests {

@@ -419,6 +419,6 @@ fn package_test(){
 
 //组织管理 - 电商实训
 fn package_trai_test(){
-    let order_id = restaurant::gateway::order::create_order();
+    let order_id = restaurant::front_of_house::serving::take_order();
     println!("order_id : {}", order_id);
 }
