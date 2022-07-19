@@ -14,6 +14,9 @@
 mod gateway;
 pub use crate::gateway::order;
 
+mod pay;
+pub use crate::pay::pay::pre_pay;
+
 pub mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {
@@ -24,6 +27,8 @@ pub mod front_of_house {
     }
 
     pub mod serving {
+        use crate::order;
+
         pub fn take_order() -> String{
             let order_id = order::create_order();
             order_id
@@ -31,7 +36,12 @@ pub mod front_of_house {
 
         pub fn serve_order() {}
 
-        pub fn take_payment() {}
+        use crate::pay;
+
+        pub fn take_payment() -> String {
+            let trade_id = pay::pay::pre_pay();
+            trade_id
+        }
     }
 }
 

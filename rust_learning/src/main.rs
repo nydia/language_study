@@ -419,6 +419,10 @@ fn package_test(){
 
 //组织管理 - 电商实训
 fn package_trai_test(){
+    //产生order_id
     let order_id = restaurant::front_of_house::serving::take_order();
     println!("order_id : {}", order_id);
+
+    let trade_id = restaurant::front_of_house::serving::take_payment();
+    println!("trade id : {}", trade_id);
 }
