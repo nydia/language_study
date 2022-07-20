@@ -46,6 +46,9 @@ fn main() {
     //组织管理 - 电商实训
     package_trai_test();
 
+    //常见集合
+    common_collections_test();
+
 }
 
 //基础语法
@@ -425,4 +428,60 @@ fn package_trai_test(){
 
     let trade_id = restaurant::front_of_house::serving::take_payment();
     println!("trade id : {}", trade_id);
+}
+
+//常见集合
+fn common_collections_test(){
+    //vector
+    common_collections_vector_test();;
+    //string
+    common_collections_string_test();
+    //hashmap
+    common_collections_hashmap_test();
+
+
+    //vector
+    fn common_collections_vector_test(){
+        //v的作用域仅限于这个方法
+        let mut v:Vec<u32>  = Vec::new();
+        v.push(1);
+        v.push(2);
+        v.push(3);
+        v.push(4);
+        print!("vector ");
+        for i in v {
+            print!("{}, ", i);
+        }
+        println!("");
+
+        //使用宏创建集合
+        let v2 = vec![1, 2, 3];
+        print!("vector ");
+        //我们可以遍历其所有的元素而无需通过索引一次一个的访问。
+        for i in &v2 {
+            print!("{}, ", i);
+        }
+        println!("");
+        for i in v2 {
+            print!("{}, ", i);
+        }
+        println!("");
+    }
+
+    //string
+    fn common_collections_string_test(){
+        let str = String::new();
+        let str2 = String::from("it is str");
+
+        let data = "initial contents";
+        let s = data.to_string();
+
+    // 该方法也可直接用于字符串字面值：
+    let s = "initial contents".to_string();
+    }
+    //hashmap
+    fn common_collections_hashmap_test(){
+
+    }
+   
 }
