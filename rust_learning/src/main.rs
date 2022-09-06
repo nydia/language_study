@@ -49,6 +49,9 @@ fn main() {
     //常见集合
     common_collections_test();
 
+    //错误
+    error_test();
+
 }
 
 //基础语法
@@ -489,7 +492,8 @@ fn common_collections_test(){
 
         // 该方法也可直接用于字符串字面值：
         let s6 = "initial contents".to_string();
-        }
+    }
+    
     //hashmap
     use std::collections::HashMap;
     fn common_collections_hashmap_test(){
@@ -500,4 +504,22 @@ fn common_collections_test(){
         
     }
    
+}
+
+//错误
+use std::fs::File;
+fn error_test(){
+    //panic!("crash and return");
+
+    enum Result<T,E>{
+        Ok(T),
+        Err(E),
+    }
+    let f: u32 = File::open("hello.txt");
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => panic!("Problem opening the file: {:?}", error),
+    };
+
+
 }
