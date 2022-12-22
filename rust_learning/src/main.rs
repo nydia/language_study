@@ -515,11 +515,11 @@ fn error_test(){
         Ok(T),
         Err(E),
     }
-    let f: u32 = File::open("hello.txt");
-    let f = match f {
-        Ok(file) => file,
-        Err(error) => panic!("Problem opening the file: {:?}", error),
-    };
+    //let f: u32 = File::open("hello.txt");
+    //let f = match f {
+    //    Ok(file) => file,
+    //    Err(error) => panic!("Problem opening the file: {:?}", error),
+    //};
 
 
 }
