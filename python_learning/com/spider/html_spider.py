@@ -12,7 +12,7 @@ def saveHtml(fileName, fileContent):
 
 
 def main():
-    url = "https://www.zhihuishu.com/"  # url
+    url = "https://www.javamall.com.cn/docs/7.2.3_upgrade/standard/dev-flow"  # url
     html = getHtml(url)  # 调用函数获取bytes
     saveHtml("C:\temp\javashop.html", html)  # 保存
     print("保存网页完成")  # 提示语
