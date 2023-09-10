@@ -1,5 +1,14 @@
-# Compiled class file
-*.class
+# vscode
+.vscode/
+venv3/
+*.pyc
+
+
+# idea
+.idea/
+
+
+
 
 # Log file
 *.log
@@ -23,16 +32,14 @@
 hs_err_pid*
 
 # java
-.idea/
 log/
 logs/
 target/
 .settings/
+*.class
 
 # go
-.idea/
 log/
 logs/
 
-# vscode
-.vscode/
+# python
