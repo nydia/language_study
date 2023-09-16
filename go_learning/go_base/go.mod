@@ -1,4 +1,4 @@
-module geektime/go_learn
+module go_base
 
 go 1.16
 
