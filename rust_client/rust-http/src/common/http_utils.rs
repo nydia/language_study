@@ -6,19 +6,8 @@ use serde_json::value::Value;
 pub struct HttpUtils {}
 
 impl HttpUtils {
-    
-    pub fn get() -> String{
-        let body = reqwest::get("http://127.0.0.1:8081/demo")
-        .await?
-        .text()
-        .await?;
-        
-        //println!("body = {:?}", body);
-        return body;
-        
-    }
 
-    async fn post() -> Result<HashMap<String, Value>, reqwest::Error>{
+    pub async fn post() -> Result<HashMap<String, Value>, reqwest::Error>{
         // post 请求要创建client
         let client = reqwest::Client::new();
     
