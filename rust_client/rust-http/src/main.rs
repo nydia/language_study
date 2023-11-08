@@ -20,6 +20,11 @@ fn handle_index() -> (String, String) {
 
 // 404页面
 fn handle_404() -> (String, String) {
+    (file_return("404.html"), status(200, "OK"))
+}
+
+// handle_demo
+fn handle_demo() -> (String, String) {
     (String::new(), status(200, "OK"))
 }
 
