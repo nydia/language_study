@@ -9,8 +9,6 @@ venv3/
 .idea/
 
 
-
-
 # Log file
 *.log
 
@@ -42,5 +40,8 @@ target/
 # go
 log/
 logs/
+
+# rust
+.exe
 
 # python
