@@ -11,7 +11,6 @@ pub mod tests {
         let resp = http_utils::HttpUtils::get();
         println!("{:#?}", resp.is_ok());
         println!("{:#?}", resp.ok());
-        println!("{:#?}", resp.map());
     }
 
     #[test]
@@ -21,6 +20,7 @@ pub mod tests {
     }
 
     #[test]
+    #[warn(unused_must_use)]
     fn test_post_handle() {
         request();
     }
