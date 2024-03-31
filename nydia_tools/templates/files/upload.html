@@ -43,21 +43,16 @@
 	<div id="nav">
 	</div>
 	<div id="section">
-		<form action="/wikibaike/search" method="get">
-			<input type="text" name="q" /> <input type="submit" value="搜索" />
+		<div id="uploadPosi" style="border:1px solid red; width:400px; height:300px;"></div
+		<form action="/files/file_upload_page" method="get">
+			<input type="text" name="q" style="width: 270px;"/> <input type="submit" value="搜索" />
 		</form>
-		<ul style="width: 600px; margin-top:10px;">
-			<!-- 这里是模板语言，for循环，最后需要 endfor -->
-			{% for foo in baikeArticleList %}
-			<li id="{{ foo.id }}"><a href="/wikibaike/article/view?articleId={{foo.id}}" target="_blank">{{ foo.title }}</a></li>
-			{% endfor %}
-		</ul>
 	</div>
 	<div id="footer">{{copyright}}</div>
 	
 	<script type="text/javascript">
 	    $(document).ready(function(){
-
+			
 	    });
 	</script>
 </body>
