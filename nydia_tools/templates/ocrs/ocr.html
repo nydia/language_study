@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{{page_title}}</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'js/lib/zTree_v3/css/zTreeStyle/zTreeStyle.css' %}"/>
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/zTree_v3/js/jquery.ztree.core.js' %}"></script>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    /*background-color:#eeeeee;*/
+    height:550px;
+    width:200px;
+    float:left;
+    padding:5px;
+}
+#section {
+    width:350px;
+    float:left;
+    padding:10px; 
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px; 
+    position:fixed; bottom:0;
+    width: 100%;
+}
+</style>
+</head>
+<body>
+	<div id="header">
+		<h1>百科书</h1>
+	</div>
+	<div id="nav">
+	    <div class="ztree nav-left" id="tree">
+	    	
+	    </div>
+	</div>
+	<div id="section">
+		<form action="/wikibaike/search" method="get">
+			<input type="text" name="q" /> <input type="submit" value="搜索" />
+		</form>
+		<ul style="width: 600px; margin-top:10px;">
+			<!-- 这里是模板语言，for循环，最后需要 endfor -->
+			{% for foo in baikeArticleList %}
+			<li id="{{ foo.id }}"><a href="/wikibaike/article/view?articleId={{foo.id}}" target="_blank">{{ foo.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="footer">{{copyright}}</div>
+	
+	<div style="display:none;" id="dataTree">{{baikeTypeNodeList}}</div>
+	<script type="text/javascript">
+		var zTree;
+	    var setting = {
+	        view: {
+	            dblClickExpand: false,
+	            showLine: true,
+	            selectedMulti: false,
+	            showIcon: true
+	        },
+	        data: {
+	            simpleData: {
+	                enable:true,
+	                idKey: "id",
+	                pIdKey: "pId",
+	                rootPId: ""
+	            }
+	        },
+	        callback: {
+	            beforeClick: function(treeId, treeNode) {
+	                var zTree = $.fn.zTree.getZTreeObj("tree");
+	                if (treeNode.isParent) {
+	                    zTree.expandNode(treeNode);
+	                    return false;
+	                } else {
+	                    return true;
+	                }
+	            }
+	        }
+	    };
+	    /*
+	    var zNodes =[
+	        {id:1, pId:0, name:"水果", open:false},
+	        {id:101, pId:1, name:"苹果"},
+	        {id:102, pId:1, name:"香蕉"},
+	        {id:103, pId:1, name:"梨"},
+	        {id:10101, pId:101, name:"红富士苹果"},
+	        {id:10102, pId:101, name:"红星苹果"},            
+	        {id:10103, pId:101, name:"嘎拉"},
+	        {id:10104, pId:101, name:"桑萨"},
+	        {id:10201, pId:102, name:"千层蕉"},
+	        {id:10202, pId:102, name:"仙人蕉"},
+	        {id:10203, pId:102, name:"吕宋蕉"},
+	    ]*/
+	    
+	    var zNodes = JSON.parse($("#dataTree").text());
+	    $(document).ready(function(){
+	        var t = $("#tree");
+	        
+	        /**
+	         * zTree 初始化方法：$.fn.zTree.init(t, setting, zNodes)
+	         * t:用于展现 zTree 的 DOM 容器
+	         * setting:zTree 的配置数据
+	         * zNodes:zTree 的节点数据  
+	         * 
+	         */
+	        t = $.fn.zTree.init(t, setting, zNodes);
+	    });
+	</script>
+</body>
+</html>
