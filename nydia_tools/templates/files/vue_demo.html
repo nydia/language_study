@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+        <title>Document</title>
+        <style>
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+            }
+            #app {
+                padding: 0px 10px 10px 10px;
+            }
+            .msg {
+                margin-top: 10px;
+                border: 1px solid #ebebeb;
+                border-radius: 3px;
+                padding: 10px 20px;
+            }
+            .msg-con {
+                line-height: 28px;
+                display: flex;
+            }
+            .msg-title {
+                display: inline-block;
+                width: 80px;
+                text-align: right;
+                font-size: 14px;
+                color: #606266;
+            }
+            .msg-text {
+                font-size: 14px;
+                word-break: break-all;
+                flex: 1;
+            }
+            .button_next {
+                cursor: pointer;
+                background: red;
+                padding: 5px;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div class="msg-con">
+                <div class="msg-title">图片链接：</div>
+                <span class="msg-text"
+                    ><img
+                        :src="data.imgUrl"
+                        alt=""
+                        srcset=""
+                        height="200"
+                        width="400"
+                    />
+                    <span class="button_next" @click="getImg(true)"
+                        >上一张</span
+                    >
+                    <span class="button_next" @click="getImg(false)"
+                        >下一张</span
+                    ></span
+                >
+            </div>
+            <div class="msg-con">
+                <div class="msg-title">块：</div>
+                <span class="msg-text">{{data.blockNumber}}</span>
+            </div>
+            <div class="msg-con">
+                <div class="msg-title">from：</div>
+                <span class="msg-text">{{data.from}}</span>
+            </div>
+            <div class="msg-con">
+                <div class="msg-title">to：</div>
+                <span class="msg-text">{{data.to}}</span>
+            </div>
+        </div>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    data: {},
+                    imgNum: [9920, 7011, 2698, 209, 673, 7762],
+                    num: 0,
+                },
+                mounted() {
+                    this.getData(this.imgNum[this.num]);
+                },
+                methods: {
+                    getImg(flag) {
+                        if (flag) {
+                            if (this.num == 0) {
+                                this.num = 5;
+                            } else {
+                                this.num--;
+                            }
+                        } else {
+                            if (this.num == 5) {
+                                this.num = 0;
+                            } else {
+                                this.num++;
+                            }
+                        }
+                        this.getData(this.imgNum[this.num]);
+                    },
+                    getData(e) {
+                        this.$http
+                            .get("http://192.168.137.1:8089/nft/imgInfo/" + e)
+                            .then(
+                                function (res) {
+                                    console.log(res.body);
+                                    this.data = res.body;
+                                },
+                                function () {}
+                            );
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

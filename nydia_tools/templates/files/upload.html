@@ -23,7 +23,7 @@
 #section {
     width:350px;
     float:left;
-    padding:10px; 
+    padding:100px; 
 }
 #footer {
     background-color:black;
@@ -34,6 +34,9 @@
     position:fixed; bottom:0;
     width: 100%;
 }
+img[src=""],img:not([src]){
+    opacity:0;
+}
 </style>
 </head>
 <body>
@@ -43,17 +46,108 @@
 	<div id="nav">
 	</div>
 	<div id="section">
-		<div id="uploadPosi" style="border:1px solid red; width:400px; height:300px;"></div
-		<form action="/files/file_upload_page" method="get">
-			<input type="text" name="q" style="width: 270px;"/> <input type="submit" value="搜索" />
+		
+		<!--<form action="/files/file_upload" method="get" onclick="return true" >-->
+        <form method="post" onclick="return true" >
+            <div id="uploadPosi" style="border:1px solid red; width:500px; height:400px;">
+                <img id="jietuImg" src="" alt="" style="border:1px solid red; width:500px; height:400px;"/>
+            </div>
+            <input type="hidden" id="imgBase64" value=""/>
+			<input type="text" name="q" style="width: 293px;"/> <input type="submit" value="上传" onclick ="fileUpload()"/>
 		</form>
 	</div>
 	<div id="footer">{{copyright}}</div>
 	
 	<script type="text/javascript">
-	    $(document).ready(function(){
-			
-	    });
+        var savedPictureContent = "";
+        window.addEventListener("paste", function (e) {
+            console.log("window.addEventListener >>>> ")
+            if (!(e.clipboardData && e.clipboardData.items)) {
+                return;
+            }
+            for (var i = 0, len = e.clipboardData.items.length; i < len; i++) {
+                var itemz = e.clipboardData.items[i];
+                if (itemz.kind === "string") {
+                	var str = itemz.getAsString();
+                	console.log(str)
+                }else if (itemz.kind === "file") {
+                    console.log("file handler >>>>> ")
+                    var pasteFileBlob = itemz.getAsFile();
+                    //判断是不是图片，最好通过文件类型判断
+                    var isImg=(pasteFileBlob && 1)||-1;
+                    var reader=new FileReader();
+                    if(isImg>=0){
+                        //将文件读取为 DataURL
+                        reader.readAsDataURL(pasteFileBlob);
+                    }
+                    //文件读取完成时触发
+                    reader.onload=function(event){
+                        //获取base64流
+                        var base64_str=event.target.result;
+                        //div中的img标签src属性赋值，可以直接展示图片
+                        $("#jietuImg").attr("src",base64_str);
+                        
+                        savedPictureContent = base64_str;
+                        $("#imgBase64").val(base64_str);
+
+                    }
+                }
+            }
+        });
+        function genBase64(){
+            var file = $('upload_file').files[0];
+            r = new FileReader();  //本地预览
+            r.onload = function(){
+                $('base64_output').value = r.result;
+            }
+            r.readAsDataURL(file);    //Base64
+        }
+        function fileUpload(){
+            if(savedPictureContent === '' || savedPictureContent === undefined){
+                alert("请放置文件");
+                return false;
+
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/files/file_upload',
+                    data: {
+                        fileName: "test",
+                        imgContent: savedPictureContent
+                    },
+                    success: function(result){
+                        var data = JSON.stringify(result); 
+                        console.log(data);
+                    },
+                    error: function () {
+                        console.log('Send Request Fail..');
+                    },
+                    dataType: "json"
+                });
+            }
+            
+        }
 	</script>
+
+    <script>
+        
+        
+        //下面代码为测试
+
+        $(document).ready(function(){
+            console.log("win ready >>>>> ")
+            var keyCode;
+            // var keyCode = event.keyCode ? event.keyCode  : event.which ? event.which : event.charCode;
+			if(keyCode == "22"){
+                // press Ctrl+V keyboard
+            } else if(keyCode == "26"){
+                // press Ctrl+Z keyboard (ctrl+z只是简单的将这个单元格的值清空，要想恢复上一次值，请用右键)
+                //opCell.innerHTML = " ";
+            } else if(keyCode == "67"){
+                // press Ctrl+C keyboard
+            }
+	    });
+
+    </script>
 </body>
 </html>
