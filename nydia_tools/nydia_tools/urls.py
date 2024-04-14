@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    # 默认模块的是ocrs
     path("", include("ocrs.urls")),
+    # ocrs模块的url都加上了前缀 ocrs/
 	path("ocrs/", include("ocrs.urls")),
+    # files模块的url都加上了前缀 files/
     path("files/", include("files.urls")),
+    # admin模块的url都加上了前缀 admin/
     path('admin/', admin.site.urls),
 ]

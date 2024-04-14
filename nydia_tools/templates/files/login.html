@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{{page_title}}</title>
+{% load static %}
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    /*background-color:#eeeeee;*/
+    height:550px;
+    width:200px;
+    float:left;
+    padding:5px;
+}
+#section {
+    width:350px;
+    float:left;
+    padding:100px; 
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px; 
+    position:fixed; bottom:0;
+    width: 100%;
+}
+img[src=""],img:not([src]){
+    opacity:0;
+}
+</style>
+</head>
+<body>
+	<div id="header">
+		<h1>文件上传</h1>
+	</div>
+	<div id="nav">
+	</div>
+	<div id="section">
+		<form method="post" onclick="return true" >
+			<input type="text" name="uname" id="uname" style="width: 300px;"/>
+            <input type="text" name="upass" id="upass" style="width: 300px;"/>
+            <input type="button" value="登录" onclick ="login()"/>
+		</form>
+	</div>
+	<div id="footer">{{copyright}}</div>
+	
+	<script type="text/javascript">
+       
+        function login(){
+            var _uname = $("#uname").val()
+            var _upass = $("#upass").val()
+            if(_uname === '' || _uname === undefined || _upass === '' || _upass === undefined){
+                alert("请输入用户名密码");
+                return false;
+
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/files/user_login_page',
+                    data: {
+                        uname: _uname,
+                        upass: _upass
+                    },
+                    success: function(result){
+                        var data = JSON.stringify(result); 
+                        console.log(data);
+                        if(result.status !== 'success'){
+                            alert("登录密码或用户名错误")
+                        }
+                    },
+                    error: function () {
+                        console.log('Send Request Fail..');
+                    },
+                    dataType: "json"
+                });
+            }
+            
+        }
+	</script>
+</body>
+</html>
