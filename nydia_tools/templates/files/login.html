@@ -66,7 +66,7 @@ img[src=""],img:not([src]){
             } else {
                 $.ajax({
                     type: 'POST',
-                    url: '/files/user_login_page',
+                    url: '/files/user_login',
                     data: {
                         uname: _uname,
                         upass: _upass
@@ -74,8 +74,10 @@ img[src=""],img:not([src]){
                     success: function(result){
                         var data = JSON.stringify(result); 
                         console.log(data);
-                        if(result.status !== 'success'){
+                        if(result.status != 'success'){
                             alert("登录密码或用户名错误")
+                        } else {
+                            window.location.href="/files/file_upload_page";
                         }
                     },
                     error: function () {

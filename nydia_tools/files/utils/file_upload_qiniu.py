@@ -3,7 +3,10 @@
 """
 from qiniu import Auth,put_file
 import uuid
+import base64
 from nydia_tools import settings
+from . import path_utils
+from . import str_utils
 
 #需要填写你的 Access Key 和 Secret Key
 access_key = '3gVPGVw7N0TD3Ua4cIRun5_ZuGUEJ7z6lVMLVVy9'
@@ -12,8 +15,10 @@ secret_key = '04FmYX4VuARlhXwkSdp0_yYsd-uT9LbkkHz5Ncss'
 bucket_name = 'blogghost'
 #构建鉴权对象
 q = Auth(access_key, secret_key)
+
+qiniu_path_prefix = "http://qn.images.lhqmm.com/"
     
-def qiniu_upload(): 
+def qiniu_upload(base64_content_path): 
     #上传后保存的文件名
     unique_id = uuid.uuid4()
     hex_id = unique_id.hex
@@ -24,8 +29,25 @@ def qiniu_upload():
     token = q.upload_token(bucket_name, key, 3600)
     
     #要上传文件的本地路径
-    base_path = settings.BASE_DIR.__str__()
-    pathList = [base_path, '/files/file_path/','rocketmq2.png']
-    localfile = ''.join(pathList)
+    img_path = path_utils.get_img_dir()
+    
+    with open(img_path,'rb') as f:
+        image_base64 = f.read()
+    # 看看image_base64类型是不是正确的“bytes”类型
+    print(type(image_base64))  
+    # 解码图片
+    imgdata = base64.b64decode(image_base64)
+    #将图片保存为文件
+    localfile = ''.join([img_path, str_utils.get_random_str(), '.png'])
+    with open(localfile,'wb') as f:
+        f.write(imgdata)
+    
+    # 临时文件
+    # pathList = [img_path,'rocketmq2.png']
+    # localfile = ''.join(pathList)
+    
     ret, info = put_file(token, key, localfile, version='v2') 
     print(info)
+    print("上传之后的key:" + ret['key'])
+    return ''.join([qiniu_path_prefix, ret['key']])
+    

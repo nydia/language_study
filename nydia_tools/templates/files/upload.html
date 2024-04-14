@@ -48,12 +48,15 @@ img[src=""],img:not([src]){
 	<div id="section">
 		
 		<!--<form action="/files/file_upload" method="get" onclick="return true" >-->
-        <form method="post" onclick="return true" >
+        <form method="post">
             <div id="uploadPosi" style="border:1px solid red; width:500px; height:400px;">
                 <img id="jietuImg" src="" alt="" style="border:1px solid red; width:500px; height:400px;"/>
             </div>
             <input type="hidden" id="imgBase64" value=""/>
-			<input type="text" name="q" style="width: 293px;"/> <input type="submit" value="上传" onclick ="fileUpload()"/>
+			<input type="text" name="img_path" id="img_path" style="width: 293px;"/> 
+            <!-- 使用submit 会自动提交 -->
+            <!--<input type="submit" value="上传" onclick ="fileUpload()"/>-->
+            <input type="button" value="上传" onclick ="fileUpload()"/>
 		</form>
 	</div>
 	<div id="footer">{{copyright}}</div>
@@ -118,6 +121,7 @@ img[src=""],img:not([src]){
                     success: function(result){
                         var data = JSON.stringify(result); 
                         console.log(data);
+                        $("#img_path").val(result.img_path)
                     },
                     error: function () {
                         console.log('Send Request Fail..');

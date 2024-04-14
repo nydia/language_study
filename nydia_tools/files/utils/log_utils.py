@@ -7,7 +7,7 @@ from loguru import logger
 class LogUtils:
     def __init__(self):
         pass
-    def info(msg):
+    def info(self, msg):
         logger.info(msg)
         
         
