@@ -44,5 +44,10 @@ python manage.py runserver
 6. ocr页面 http://127.0.0.1:8000/ocrs/ocr
 7. orc识别接口 http://127.0.0.1:8000/ocrs/doocr
 
+# django在linux部署
+python组件导入导出（这里是全量导入导出，最好利用虚拟环境缩小包的范围）
+导出：  pip freeze > requirements.txt
+导入： pip install -r requirements.txt
+
 # base64转图片
 https://www.lddgo.net/convert/base64-to-image
