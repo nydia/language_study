@@ -17,29 +17,25 @@ bucket_name = 'blogghost'
 q = Auth(access_key, secret_key)
 
 qiniu_path_prefix = "http://qn.images.lhqmm.com/"
-    
-def qiniu_upload(base64_content_path):     
-    #上传后保存的文件名
-    unique_id = uuid.uuid4()
-    hex_id = unique_id.hex
-    keyList = ['test/',hex_id,'.png']
-    key =  ''.join(keyList)
-    
-    #生成上传 Token，可以指定过期时间等
-    token = q.upload_token(bucket_name, key, 3600)
-    
-    #要上传文件的本地路径
-    print("txt路径:" + base64_content_path)
-    
-    with open(base64_content_path,'rb') as f:
+qiniu_dir = 'test/'
+
+# 上传文件流程：前端传来base64图片内容 -> 后台获取base64内容写入本地txt文件 -> 解析txt的base64内容写成图片 -> 上传本地图片内容到七牛云
+def qiniu_upload_by_txt_path(base64_local_path):
+    #打印要上传文件的本地txt路径
+    print("txt路径:" + base64_local_path)
+      
+    #获取到txt里面的base64内容
+    with open(base64_local_path,'rb') as f:
         image_base64 = f.read()
     # 看看image_base64类型是不是正确的“bytes”类型
     print(type(image_base64))
-    # 解码图片
+    
+    # 解码图片： 从浏览器过来的图片有前缀 data:image/png;base64, 所以要把这个前缀去掉，取 iVBORw0KGgoAAA 后面的内容
     img_head,img_context=image_base64.decode().split(",")  # 将base64_str以“,”分割为两部分
     imgdata = base64.b64decode(img_context)    # 解码时只要内容部分
-    #将图片保存为文件
-    localfile = ''.join([path_utils.get_base_dir(), str_utils.get_random_str(), '.png'])
+    #图片保存在本地的路径
+    localfile = ''.join([path_utils.get_img_dir(), str_utils.get_random_str(), '.png'])
+    # 把base64内容写入本地
     with open(localfile,'wb') as f:
         f.write(imgdata)
     
@@ -47,8 +43,49 @@ def qiniu_upload(base64_content_path):
     # pathList = [img_path,'rocketmq2.png']
     # localfile = ''.join(pathList)
     
+    #上传到七牛云后保存的文件名
+    unique_id = uuid.uuid4()
+    hex_id = unique_id.hex
+    keyList = [qiniu_dir,hex_id,'.png']
+    key =  ''.join(keyList)
+    
+    #生成上传 Token，可以指定过期时间等
+    token = q.upload_token(bucket_name, key, 3600)
+    
     ret, info = put_file(token, key, localfile, version='v2') 
     print(info)
     print("上传之后的key:" + ret['key'])
     return ''.join([qiniu_path_prefix, ret['key']])
     
+# 上传文件流程：前端传来base64图片内容 -> 后台获取base64内容解析成图片 -> 上传本地图片内容到七牛云
+def qiniu_upload_by_base64_content(base64_content):
+    #base64文件
+    #print("base64文件:" + base64_content)
+    
+    # 看看image_base64类型是不是正确的“bytes”类型
+    print(type(base64_content))
+    # str to bytes
+    img_base64_content = bytes(base64_content, encoding = "utf8")
+    
+    # 解码图片： 从浏览器过来的图片有前缀 data:image/png;base64, 所以要把这个前缀去掉，取 iVBORw0KGgoAAA 后面的内容
+    img_head,img_context=img_base64_content.decode().split(",")  # 将base64_str以“,”分割为两部分
+    imgdata = base64.b64decode(img_context)    # 解码时只要内容部分
+    #图片保存在本地的路径
+    localfile = ''.join([path_utils.get_img_dir(), str_utils.get_random_str(), '.png'])
+    # 把base64内容写入本地
+    with open(localfile,'wb') as f:
+        f.write(imgdata)
+    
+    #上传到七牛云后保存的文件名
+    unique_id = uuid.uuid4()
+    hex_id = unique_id.hex
+    keyList = [qiniu_dir,hex_id,'.png']
+    key =  ''.join(keyList)
+    
+    #生成上传 Token，可以指定过期时间等
+    token = q.upload_token(bucket_name, key, 3600)
+    
+    ret, info = put_file(token, key, localfile, version='v2') 
+    print(info)
+    print("上传之后的key:" + ret['key'])
+    return ''.join([qiniu_path_prefix, ret['key']])

@@ -9,7 +9,7 @@ from django.http import JsonResponse
 
 from django.http import HttpResponse
 
-from .utils import file_upload_qiniu
+from .utils import file_upload_base
 from .utils import user_utils
 from .utils import path_utils
 from .utils import str_utils
@@ -40,26 +40,23 @@ def file_upload(request):
     imgContent = request.POST.get('imgContent')
     #print("文件base64 " + imgContent)
     
-    #要上传文件的本地路径
-    img_path = path_utils.get_img_dir()
+    #要上传文件存放的本地根目录
+    sys_base_path = path_utils.get_img_dir()
     
+    # 文件名称
     random_str = str_utils.get_random_str()
-    path_txt_list = [img_path, random_str, ".txt"]
+    # txt文件
+    path_txt_list = [sys_base_path, random_str, ".txt"]
     path_txt = ''.join(path_txt_list) 
     file=open(path_txt,'wt')#写成文本格式
     file.write(imgContent)
     file.close()
     
-    # path2 = [img_path, random_str, ".jpg"]
-    # file = open(''.join(path2),'wb')
-    # file.write(bytes(imgContent, 'utf-8'))
-    # file.close()
+    # 方式1： 根据txt文件里面的base64图片内容生成图片上传到七牛云
+    #img_path = file_upload_base.upload_by_txt_path(path_txt) 
     
-    # path3 = [img_path, random_str, ".png"]
-    # with open(''.join(path3),'wb') as f:
-    #     f.write(bytes(imgContent, 'utf-8'))
-        
-    img_path = file_upload_qiniu.qiniu_upload(path_txt)    
+    # 方式2： 根据base64图片内容生成图片上传到七牛云
+    img_path = file_upload_base.upload_by_base64_content(imgContent) 
 
     return JsonResponse({'status': 'success','img_path': img_path})
 
