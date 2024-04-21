@@ -30,3 +30,19 @@ pip3 install qiniu
 Loguru是一个Python日志记录库，以其易用性和灵活性而闻名
 pip install loguru
 
+#  启动
+根目录下运行
+```shell
+python manage.py runserver
+```
+默认端口8000，访问页面
+1. 首页  http://127.0.0.1:8000/  (设置的默认首页是 http://127.0.0.1:8000/ocrs)
+2. 文件上传页面 http://127.0.0.1:8000/files/file_upload_page
+3. 文件上传  http://127.0.0.1:8000/files/file_upload
+4. 文件登录页面 http://127.0.0.1:8000/files/user_login_page
+5. 文件登录 http://127.0.0.1:8000/files/user_login
+6. ocr页面 http://127.0.0.1:8000/ocrs/ocr
+7. orc识别接口 http://127.0.0.1:8000/ocrs/doocr
+
+# base64转图片
+https://www.lddgo.net/convert/base64-to-image

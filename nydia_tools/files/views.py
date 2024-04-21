@@ -44,19 +44,20 @@ def file_upload(request):
     img_path = path_utils.get_img_dir()
     
     random_str = str_utils.get_random_str()
-    path_txt = [img_path, random_str, ".txt"]
-    file=open(''.join(path_txt),'wt')#写成文本格式
+    path_txt_list = [img_path, random_str, ".txt"]
+    path_txt = ''.join(path_txt_list) 
+    file=open(path_txt,'wt')#写成文本格式
     file.write(imgContent)
     file.close()
     
-    path2 = [img_path, random_str, ".jpg"]
-    file = open(''.join(path2),'wb')
-    file.write(bytes(imgContent, 'utf-8'))
-    file.close()
+    # path2 = [img_path, random_str, ".jpg"]
+    # file = open(''.join(path2),'wb')
+    # file.write(bytes(imgContent, 'utf-8'))
+    # file.close()
     
-    path3 = [img_path, random_str, ".png"]
-    with open(''.join(path3),'wb') as f:
-        f.write(bytes(imgContent, 'utf-8'))
+    # path3 = [img_path, random_str, ".png"]
+    # with open(''.join(path3),'wb') as f:
+    #     f.write(bytes(imgContent, 'utf-8'))
         
     img_path = file_upload_qiniu.qiniu_upload(path_txt)    
 

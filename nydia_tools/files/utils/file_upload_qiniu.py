@@ -18,7 +18,7 @@ q = Auth(access_key, secret_key)
 
 qiniu_path_prefix = "http://qn.images.lhqmm.com/"
     
-def qiniu_upload(base64_content_path): 
+def qiniu_upload(base64_content_path):     
     #上传后保存的文件名
     unique_id = uuid.uuid4()
     hex_id = unique_id.hex
@@ -29,16 +29,17 @@ def qiniu_upload(base64_content_path):
     token = q.upload_token(bucket_name, key, 3600)
     
     #要上传文件的本地路径
-    img_path = path_utils.get_img_dir()
+    print("txt路径:" + base64_content_path)
     
-    with open(img_path,'rb') as f:
+    with open(base64_content_path,'rb') as f:
         image_base64 = f.read()
     # 看看image_base64类型是不是正确的“bytes”类型
-    print(type(image_base64))  
+    print(type(image_base64))
     # 解码图片
-    imgdata = base64.b64decode(image_base64)
+    img_head,img_context=image_base64.decode().split(",")  # 将base64_str以“,”分割为两部分
+    imgdata = base64.b64decode(img_context)    # 解码时只要内容部分
     #将图片保存为文件
-    localfile = ''.join([img_path, str_utils.get_random_str(), '.png'])
+    localfile = ''.join([path_utils.get_base_dir(), str_utils.get_random_str(), '.png'])
     with open(localfile,'wb') as f:
         f.write(imgdata)
     
