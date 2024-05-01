@@ -53,6 +53,7 @@ img[src=""],img:not([src]){
                 <img id="jietuImg" src="" alt="" style="border:1px solid red; width:500px; height:400px;"/>
             </div>
             <input type="hidden" id="imgBase64" value=""/>
+            <input type="text" name="file_path" id="file_path" style="width: 200px;"/>(文件目录) 
 			<input type="text" name="img_path" id="img_path" style="width: 293px;"/> 
             <!-- 使用submit 会自动提交 -->
             <!--<input type="submit" value="上传" onclick ="fileUpload()"/>-->
@@ -116,6 +117,7 @@ img[src=""],img:not([src]){
                     url: '/files/file_upload',
                     data: {
                         fileName: "test",
+                        filePath: $("#file_path").val(),
                         imgContent: savedPictureContent
                     },
                     success: function(result){

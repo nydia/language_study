@@ -37,6 +37,8 @@ def file_upload(request):
     
     fileName = request.POST.get('fileName')
     print("文件名称： " + fileName)
+    filePath = request.POST.get('filePath')
+    print("文件目录： " + filePath)
     imgContent = request.POST.get('imgContent')
     #print("文件base64 " + imgContent)
     
@@ -53,10 +55,10 @@ def file_upload(request):
     file.close()
     
     # 方式1： 根据txt文件里面的base64图片内容生成图片上传到七牛云
-    #img_path = file_upload_base.upload_by_txt_path(path_txt) 
+    #img_path = file_upload_base.upload_by_txt_path(path_txt, filePath) 
     
     # 方式2： 根据base64图片内容生成图片上传到七牛云
-    img_path = file_upload_base.upload_by_base64_content(imgContent) 
+    img_path = file_upload_base.upload_by_base64_content(imgContent, filePath) 
 
     return JsonResponse({'status': 'success','img_path': img_path})
 

@@ -1,9 +1,10 @@
 """
 七牛云文件上传
 """
-from qiniu import Auth,put_file
+import os
 import uuid
 import base64
+from qiniu import Auth,put_file
 from nydia_tools import settings
 from . import path_utils
 from . import str_utils
@@ -17,12 +18,17 @@ bucket_name = 'blogghost'
 q = Auth(access_key, secret_key)
 
 qiniu_path_prefix = "http://qn.images.lhqmm.com/"
-qiniu_dir = 'test/'
+qiniu_dir_default = 'test/'
+dir_spliter = os.path.sep
+qiniu_dir = qiniu_dir_default
 
 # 上传文件流程：前端传来base64图片内容 -> 后台获取base64内容写入本地txt文件 -> 解析txt的base64内容写成图片 -> 上传本地图片内容到七牛云
-def qiniu_upload_by_txt_path(base64_local_path):
+def qiniu_upload_by_txt_path(base64_local_path, file_path):
     #打印要上传文件的本地txt路径
     print("txt路径:" + base64_local_path)
+    
+    print("file_path路径:" + file_path)
+    qiniu_dir = qiniu_upload_dir(file_path)  
       
     #获取到txt里面的base64内容
     with open(base64_local_path,'rb') as f:
@@ -58,9 +64,12 @@ def qiniu_upload_by_txt_path(base64_local_path):
     return ''.join([qiniu_path_prefix, ret['key']])
     
 # 上传文件流程：前端传来base64图片内容 -> 后台获取base64内容解析成图片 -> 上传本地图片内容到七牛云
-def qiniu_upload_by_base64_content(base64_content):
+def qiniu_upload_by_base64_content(base64_content, file_path):
     #base64文件
     #print("base64文件:" + base64_content)
+    
+    print("file_path路径:" + file_path)
+    qiniu_dir = qiniu_upload_dir(file_path)
     
     # 看看image_base64类型是不是正确的“bytes”类型
     print(type(base64_content))
@@ -89,3 +98,10 @@ def qiniu_upload_by_base64_content(base64_content):
     print(info)
     print("上传之后的key:" + ret['key'])
     return ''.join([qiniu_path_prefix, ret['key']])
+
+# 获取 文件上传到服务器的 文件目录
+def qiniu_upload_dir(file_path):
+    if str_utils.str_is_not_blank(file_path):
+        return str(file_path) + str(dir_spliter)
+    else:
+        return qiniu_dir_default
