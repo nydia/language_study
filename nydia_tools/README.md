@@ -33,12 +33,14 @@ pip install loguru
 #  启动
 根目录下运行
 ```shell
+
 python manage.py runserver
 
 # docker内部启动
 nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runserver 0.0.0.0:8000 &
 
 ```
+
 默认端口8000，访问页面
 1. 首页  http://127.0.0.1:8000/  (设置的默认首页是 http://127.0.0.1:8000/ocrs)
 2. 文件上传页面 http://127.0.0.1:8000/files/file_upload_page
@@ -57,6 +59,11 @@ nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runs
 5. 文件登录 http://101.43.47.38:8000/files/user_login
 6. ocr页面 http://101.43.47.38:8000/ocrs/ocr
 7. orc识别接口 http://101.43.47.38:8000/ocrs/doocr
+
+域名地址：
+1. 文件上传页面
+http://www.91ocr.asia/tools/files/file_upload_page  （经过ng代理了）
+
 
 # django在linux部署
 python组件导入导出（这里是全量导入导出，最好利用虚拟环境缩小包的范围）

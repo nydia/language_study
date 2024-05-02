@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>{{page_title}}</title>
 {% load static %}
-<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<!-- nginx用80代理可能访问不了这个本地js，可以用在线js-->
+<!--<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>-->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <style>
 #header {
     background-color:black;
@@ -114,7 +116,8 @@ img[src=""],img:not([src]){
             } else {
                 $.ajax({
                     type: 'POST',
-                    url: '/files/file_upload',
+                    //url: '/files/file_upload',
+                    url: 'file_upload',
                     data: {
                         fileName: "test",
                         filePath: $("#file_path").val(),

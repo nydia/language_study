@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>{{page_title}}</title>
 {% load static %}
-<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<!-- nginx用80代理可能访问不了这个本地js，可以用在线js-->
+<!--<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>-->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <style>
 #header {
     background-color:black;
@@ -66,7 +68,8 @@ img[src=""],img:not([src]){
             } else {
                 $.ajax({
                     type: 'POST',
-                    url: '/files/user_login',
+                    //url: '/files/user_login',
+                    url: 'user_login',
                     data: {
                         uname: _uname,
                         upass: _upass
@@ -77,7 +80,8 @@ img[src=""],img:not([src]){
                         if(result.status != 'success'){
                             alert("登录密码或用户名错误")
                         } else {
-                            window.location.href="/files/file_upload_page";
+                            //window.location.href="/files/file_upload_page";
+                            window.location.href="file_upload_page";
                         }
                     },
                     error: function () {
