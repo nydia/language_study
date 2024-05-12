@@ -24,6 +24,8 @@ urlpatterns = [
 	path("ocrs/", include("ocrs.urls")),
     # files模块的url都加上了前缀 files/
     path("files/", include("files.urls")),
+    # tools模块的url都加上了前缀 tools/
+    path("tools/", include("tools.urls")),
     # admin模块的url都加上了前缀 admin/
     path('admin/', admin.site.urls),
 ]

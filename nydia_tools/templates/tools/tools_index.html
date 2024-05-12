@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>工具</title>
+<link href="http://qn.images.lhqmm.com/test/359c8e85ff8143cc9047acf8088df786.png" rel="shortcut icon">
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+<script>
+//veujs代码
+document.addEventListener('DOMContentLoaded', function() {
+        const { createApp, ref } = Vue;
+        if (typeof Vue !== 'undefined') {
+        createApp({
+            compilerOptions: {
+                delimiters: ['${', '}']
+            },
+            data() {
+                return {
+                    vuemessage: "开始"
+                }
+            }
+            }).mount('#app');
+        }
+    });
+</script>
+
+</head>
+
+<body>
+<div id="app">
+    <link href="favicon.ico" rel="shortcut icon">
+    ${ vuemessage }
+</div>
+</body>
+
+</html>
