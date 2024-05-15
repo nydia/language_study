@@ -1,28 +1,102 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <!-- 引入样式 -->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<meta charset="UTF-8">
+<title>工具</title>
+<link href="http://qn.images.lhqmm.com/test/359c8e85ff8143cc9047acf8088df786.png" rel="shortcut icon">
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+<script>
+//veujs代码
+document.addEventListener('DOMContentLoaded', function() {
+        const { createApp, ref } = Vue;
+        if (typeof Vue !== 'undefined') {
+        createApp({
+            compilerOptions: {
+                delimiters: ['${', '}']
+            },
+            data() {
+                return {
+                    vuemessage: "导航工具"
+                }
+            }
+            }).mount('#app');
+        }
+    });
+</script>
+
+<style>
+    .text {
+      font-size: 14px;
+    }
+  
+    .item {
+      margin-bottom: 18px;
+    }
+  
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+    .clearfix:after {
+      clear: both
+    }
+  
+    .box-card {
+      width: 480px;
+    }
+
+    
+    table {
+      border-collapse: collapse; /* 合并表格边框 */
+      border: 1px solid #ccc; /* 设置表格边框样式和颜色 */
+    }
+    td {
+      border: 1px solid #ccc; /* 设置表格边框样式和颜色 */
+    }
+  </style>
+  
 </head>
+
 <body>
-  <div id="app">
-    <el-button @click="visible = true">按钮</el-button>
-    <el-dialog :visible.sync="visible" title="Hello world">
-      <p>欢迎使用 Element</p>
-    </el-dialog>
-  </div>
+<div id="app">
+    <link href="favicon.ico" rel="shortcut icon">
+    <table>
+      <tr>
+        <td>
+          <table>
+            <tr><td><b>工具</b></td></tr>
+            <tr><td><a href="https://tool.browser.qq.com/category/doc?ref=www.80dh.cn" target="_blank">腾讯QQ浏览器在线工具类</a></td></tr>
+            <tr><td><a href="http://www.91ocr.asia/tools/files/file_upload_page" target="_blank">我的快捷文件上传</a></td></tr>
+            <tr><td><a href="http://www.91ocr.asia:8086/" target="_blank">我的pdf工具</a></td></td></tr>
+            <tr><td><a href="https://note.youdao.com/" target="_blank">有道笔记</a></td></tr>
+            <tr><td><a href="https://weread.qq.com/" target="_blank">微信读书</a></td></tr>
+
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr><td><b>工具</b></td></tr>
+            <tr><td><a href="https://jdk.java.net/java-se-ri/16" target="_blank">JDK源码下载</a></td></tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr><td><b>资讯</b></td></tr>
+            <tr><td><a href="https://tech.meituan.com/" target="_blank">美团技术</a></td></tr>
+
+            <tr><td><a href="http://www.aliresearch.com/cn/index" target="_blank">阿里巴巴出品的研究报告</a></td></tr>
+            <tr><td><a href="https://www.analysys.cn/" target="_blank">易观分析：以海量数字用户资产及算法模型为核心的大数据分析工具、产品及解决方案</a></td></tr>
+
+          </table>
+        </td>
+
+      </tr>
+    </table>
+
+</div>
 </body>
-  <!-- 先引入 Vue -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- 引入组件库 -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      data: function() {
-        return { visible: false }
-      }
-    })
-  </script>
+
 </html>
