@@ -84,3 +84,6 @@ https://www.lddgo.net/convert/base64-to-image
 
 # 未定计划
 1. 做一个家庭监控：温度，适度等，接入mqtt
+
+# Openai ChatGPT
+## curl
