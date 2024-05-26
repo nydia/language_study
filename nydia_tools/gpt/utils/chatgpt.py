@@ -1,7 +1,11 @@
 import openai
 from openai import OpenAI
 
-client = OpenAI()
+client = OpenAI(
+  api_key = '',
+  organization='',
+  project='',
+)
 
 stream = client.chat.completions.create(
     model="gpt-3.5-turbo",
