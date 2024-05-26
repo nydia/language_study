@@ -3,6 +3,7 @@
 venv3/
 *.pyc
 .lock
+node_modules/
 
 
 # idea
@@ -114,7 +115,7 @@ venv.bak/
 .spyderproject
 .spyproject
 .ropeproject
-/site
+site/
 .mypy_cache/
 .dmypy.json
 dmypy.json

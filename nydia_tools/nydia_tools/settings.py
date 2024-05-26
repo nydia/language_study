@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ocrs',
     'files',
     'tools',
+    'gpt',
 ]
 
 MIDDLEWARE = [

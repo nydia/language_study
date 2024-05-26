@@ -30,6 +30,10 @@ pip3 install qiniu
 Loguru是一个Python日志记录库，以其易用性和灵活性而闻名
 pip install loguru
 
+## ChatGPT
+pip install openai
+
+
 #  启动
 根目录下运行
 ```shell

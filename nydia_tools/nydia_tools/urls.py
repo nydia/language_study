@@ -26,6 +26,8 @@ urlpatterns = [
     path("files/", include("files.urls")),
     # tools模块的url都加上了前缀 tools/
     path("tools/", include("tools.urls")),
+    # gpt模块的url都加上了前缀 gpt/
+    path("gpt/", include("gpt.urls")),
     # admin模块的url都加上了前缀 admin/
     path('admin/', admin.site.urls),
 ]
