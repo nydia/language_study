@@ -53,6 +53,7 @@ nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runs
 5. 文件登录 http://127.0.0.1:8000/files/user_login
 6. ocr页面 http://127.0.0.1:8000/ocrs/ocr
 7. orc识别接口 http://127.0.0.1:8000/ocrs/doocr
+8. 工具首页 http://127.0.0.1:8000/tools/tools_index.html
 
 
 外部地址:
