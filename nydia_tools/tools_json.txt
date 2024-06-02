@@ -1,0 +1,6 @@
+{
+    "¹¤¾ß": [
+        "https://tool.browser.qq.com/category/doc?ref=www.80dh.cn" ,
+        "http://www.91ocr.asia/tools/files/file_upload_page" 
+    ]
+}
