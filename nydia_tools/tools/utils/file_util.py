@@ -2,27 +2,27 @@
 读取文件
 """
 import requests
+import json
 
 
 class FileUtil:
     def __init__(self) -> None:
         pass
-    def down_file(self,url,file_path):
+    def down_file(self,url,file_path): # 下载远程文件
         r = requests.get(url, stream=True)
         with open(file_path, "wb") as f:
             for bl in r.iter_content(chunk_size=1024):
                 if bl:
                     f.write(bl)
         return file_path
-    def get_url_file(self):
-        #url = "https://gitee.com/techpj/quick_entry/blob/master/file.json"
-        url = "http://qn.image.91ocr.asia/json/tools_json.txt"
-        file_path = 'tools_json.txt'
-        file_path = self.down_file(url, file_path)
+    def get_remote_file(self,url,local_file_path): # 获取远程文件内容 # ToolsTest.test_file_util
+        file_path = self.down_file(url, local_file_path)
         with open(file_path, 'r') as f:
-            print(f.read())
-        #_json = response.text
-        print(file_path)
+           file_content = f.read()
+        return file_content
+    def get_local_file(self): # 获取本地文件
         pass
-    def get_local_file(self):
-        pass
+    def get_remote_json(self,url,local_file_path): # 远程文件内容转为json # ToolsTest.test_file_json
+        file_content = self.get_remote_file(url,local_file_path)
+        data = json.loads(file_content)
+        return data
