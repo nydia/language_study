@@ -1,5 +1,5 @@
 """
-GPT Parent
+GPT Parent 基类
 """
 
 class NydiaGpt:
