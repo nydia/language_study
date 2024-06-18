@@ -93,5 +93,5 @@ https://www.lddgo.net/convert/base64-to-image
 # 单元测试
 cd到项目的根目录下面：
 
-
-1. python manage.py test tools.tests.ToolsTest 测试tools模块
+1. 测试tools模块
+python manage.py test tools.tests.ToolsTest
