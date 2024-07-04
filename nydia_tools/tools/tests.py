@@ -25,4 +25,4 @@ class ToolsTest(TestCase):
         print(f'local file json : {file_util.get_local_file_json(local_file_path)}')
         
     def test_remove_watermark(self):
-        watermark_util.remove_watermark('1.png', '2.png', '3.png')
+        watermark_util.remove_watermark('C:/temp/1.jpg','C:/temp/2.jpg')
