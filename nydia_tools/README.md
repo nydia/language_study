@@ -23,6 +23,13 @@
 
 # 需要加载的包
 
+## 初始化包的方式
+- 普通方式：
+/opt/soft/Python3.11.4/bin/pip3.11 install opencv-python==4.10.0.82
+- 加速的方式：
+/opt/soft/Python3.11.4/bin/pip3.11 install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade opencv-python==4.10.0.82
+/opt/soft/Python3.11.4/bin/pip3.11 install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python-headless
+
 ## 七牛云
 pip3 install qiniu
 
