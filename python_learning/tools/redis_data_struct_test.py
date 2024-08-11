@@ -17,6 +17,13 @@ for key, value in data.items():
     r.set(key, value[0])
 memory_strings = r.memory_usage(key)
 
+script = """
+    return redis.call('object encoding key', KEYS[1])
+"""
+result = r.eval(script, 1, 'key')
+print("key:",result)
+
+
 # 列表存储
 for key, value in data.items():
     r.delete(key)
@@ -48,3 +55,5 @@ print("Memory usage for Lists:", memory_lists)
 print("Memory usage for Sets:", memory_sets)
 print("Memory usage for Sorted Sets:", memory_sorted_sets)
 print("Memory usage for Hashes:", memory_hashes)
+
+#print("Encoding usage for Strings:", encoding_strings)
