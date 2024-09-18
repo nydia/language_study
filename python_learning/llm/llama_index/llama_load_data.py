@@ -1,4 +1,4 @@
-from llama_index import SimpleDirectoryReader, GPTSimpleVectorIndex
+from llama_index.core import SimpleDirectoryReader, GPTSimpleVectorIndex
 
 
 def load_data():
