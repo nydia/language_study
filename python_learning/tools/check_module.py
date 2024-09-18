@@ -1,5 +1,6 @@
 import importlib
 
+# 测试某个模块是否存在
 def check_module(module_name):
     try:
         importlib.import_module(module_name)
