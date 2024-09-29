@@ -63,6 +63,9 @@ nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runs
 8. 工具首页 http://127.0.0.1:8000/tools/tools_index.html
 
 
+管理页面：
+1. 首页： http://127.0.0.1:8000/admin/
+
 外部地址:
 1. 首页  http://101.43.47.38:8000/  (设置的默认首页是 http://127.0.0.1:8000/ocrs)
 2. 文件上传页面 http://101.43.47.38:8000/files/file_upload_page

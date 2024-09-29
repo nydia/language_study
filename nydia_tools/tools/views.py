@@ -15,11 +15,13 @@ def tools_index(request):
     context = {}
     return render(request, "tools/tools_index.html", context, None, None, None)
 
+# 工具首页- 结合vue
 def tools_index2(request):
-    fileUtil = file_utils.FileUtil()
-    context = json_utils.serialize(fileUtil.get_url_file())
-    print("------------------")
-    print(context)
+    # 从file获取url列表
+    # fileUtil = file_utils.FileUtil()
+    #context = {json_utils.serialize(fileUtil.get_url_file())}
+    
+    context = {}
     return render(request, "tools/tools_index2.html", context, None, None, None)
 
 # 去除水印页面
@@ -33,11 +35,12 @@ def watermark(request):
     json_data = serializers.serialize('json', scripts)
     return HttpResponse(json_data, content_type="application/json")
 
-# 上传文件
+# 上传文件 - 页面
 def temp_file(request):
     context = {}
     return render(request, "tools/upload.html", context, None, None, None)
 
+# 上传文件
 @csrf_exempt
 def temp_file_upload(request):
     if request.method == 'POST' and request.FILES.getlist('files'):
