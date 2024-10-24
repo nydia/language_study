@@ -17,8 +17,9 @@
 - views：视图相关
 ## files
 子应用 - 文件模块
-## 常用的工作包
-
+## tools 常用的工作包
+- utils 工具方法
+- sub_views views拆分出来的子页面
 
 
 # 需要加载的包

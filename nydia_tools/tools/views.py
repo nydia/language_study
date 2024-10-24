@@ -15,15 +15,6 @@ def tools_index(request):
     context = {}
     return render(request, "tools/tools_index.html", context, None, None, None)
 
-# 工具首页- 结合vue
-def tools_index2(request):
-    # 从file获取url列表
-    # fileUtil = file_utils.FileUtil()
-    #context = {json_utils.serialize(fileUtil.get_url_file())}
-    
-    context = {}
-    return render(request, "tools/tools_index2.html", context, None, None, None)
-
 # 去除水印页面
 def tools_watermark(request):
     return render(request, "tools/tools_watermark.html", '', None, None, None)
@@ -52,3 +43,13 @@ def temp_file_upload(request):
             filename = fs.save(file.name, file)
         return HttpResponse('Files uploaded successfully.')
     return render(request, 'tools/upload.html')
+
+
+# 工具首页- 结合vue
+def tools_index2(request):
+    # 从file获取url列表
+    # fileUtil = file_utils.FileUtil()
+    #context = {json_utils.serialize(fileUtil.get_url_file())}
+    
+    context = {}
+    return render(request, "tools/vue/tools_index2.html", context, None, None, None)

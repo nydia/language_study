@@ -1,0 +1,26 @@
+<!-- Django模板 -->
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Django + React</title>
+    <!-- 引入React库 -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- 引入你的React组件 -->
+    <script type="module" src="{% static 'js/tools_react_component.js' %}"></script>
+
+
+</head>
+<body>
+    <!-- 定义一个容器来挂载React组件 -->
+    <div id="my-react-component-container"></div>
+    <script>
+        // 使用ReactDOM.render来渲染React组件
+        ReactDOM.render(
+            React.createElement(Greeting, {prop: 'value'}),
+            document.getElementById('my-react-component-container')
+        );
+    </script>
+</body>
+</html>
