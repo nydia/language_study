@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <!-- 引入样式 -->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-</head>
-<body>
-  <div id="app">
-    <el-button @click="visible = true">按钮</el-button>
-    <el-dialog :visible.sync="visible" title="Hello world">
-      <p>欢迎使用 Element</p>
-    </el-dialog>
+<div id="app">
+  ${ vuemessage }
   </div>
-</body>
-  <!-- 先引入 Vue -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- 引入组件库 -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
   <script>
-    new Vue({
-      el: '#app',
-      data: function() {
-        return { 
-          visible: false，
-          mytext : "你好"
+  //veujs代码
+  document.addEventListener('DOMContentLoaded', function() {
+        const { createApp, ref } = Vue;
+        if (typeof Vue !== 'undefined') {
+          createApp({
+            compilerOptions: {
+              delimiters: ['${', '}']
+            },
+            data() {
+              return vuemessage
+            }
+           }).mount('#app');
         }
-      }
-    })
+      });
   </script>
-</html>
+  

@@ -96,6 +96,8 @@ https://www.lddgo.net/convert/base64-to-image
 3. 做一个家庭监控：温度，适度等，接入mqtt。
 4. 接入gpt，做一个智能作业解析工具。
 5. 文件下载解析工具。（v1.0.0:  tools模块已经实现,目前没有页面）
+6. 集成bootstrap组件。（正在实现）
+    http://127.0.0.1:8000/tools/toolindex3#
 
 
 # Openai ChatGPT

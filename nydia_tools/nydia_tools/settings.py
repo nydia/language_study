@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'gpt',
     'django_react_components',
     'webpack_loader',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [

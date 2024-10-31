@@ -9,9 +9,13 @@ urlpatterns = [
     path('temp_file', views.temp_file, name='temp_file'),
     path('temp_file_upload', views.temp_file_upload, name='temp_file_upload'),
     
-    # vue(暂未启用)
+    # vue
     path("toolindex2",views.tools_index2, name="tools_index2"),
+    
+     # bootstrap4
+    path("toolindex3",views.tools_index3, name="tools_index3"),
     
     # react
     path("toolhome",tools_home.tools_home, name="tools_home"),
+    
 ]

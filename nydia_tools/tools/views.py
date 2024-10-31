@@ -53,3 +53,10 @@ def tools_index2(request):
     
     context = {}
     return render(request, "tools/vue/tools_index2.html", context, None, None, None)
+
+# 工具首页- 结合boostrap4
+def tools_index3(request):
+    
+    context = {}
+    return render(request, "tools/boostrap4/tools_index.html", context, None, None, None)
+
