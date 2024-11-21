@@ -108,3 +108,8 @@ cd到项目的根目录下面：
 
 1. 测试tools模块
 python manage.py test tools.tests.ToolsTest
+
+# 容器启动
+docker run -it -d -p 8000:8000 --name django -v /opt/projects/docker_dir:/opt/soft centos:centos8 /bin/bash
+如果是迁移之后的，那么启动命令如下：
+docker run -it -d -p 8000:8000 --name django -v /opt/projects/docker_dir:/opt/soft django:latest /bin/bash
