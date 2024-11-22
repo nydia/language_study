@@ -46,10 +46,16 @@ pip install openai
 根目录下运行
 ```shell
 
+# 本地启动
 python manage.py runserver
 
 # docker内部启动
+## 1. 通过宿主机映射到容器内部的python启动
 nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runserver 0.0.0.0:8000 &
+
+## 容器内部的python启动
+python3.11 manage.py runserver 0.0.0.0:8000 &
+
 
 ```
 
