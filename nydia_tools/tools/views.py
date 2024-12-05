@@ -44,6 +44,10 @@ def temp_file_upload(request):
         return HttpResponse('Files uploaded successfully.')
     return render(request, 'tools/upload.html')
 
+# printjs - 页面
+def printjs(request):
+    context = {}
+    return render(request, "tools/html/printjs.html", context, None, None, None)
 
 # 工具首页- 结合vue
 def tools_index2(request):
