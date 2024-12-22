@@ -56,6 +56,8 @@ nohup /opt/soft/Python3.11.4/bin/python3.11 /opt/soft/nydia_tools/manage.py runs
 ## 容器内部的python启动
 python3.11 manage.py runserver 0.0.0.0:8000 &
 
+或者
+/opt/python3/bin/python3.11 /opt/soft/nydia_tools/manage.py runserver 0.0.0.0:8000 &
 
 ```
 
