@@ -1,0 +1,138 @@
+pipeline {
+    //agent是jenkins的工作节点
+    agent any
+
+    options {
+        // 任务时间超过1小时，终止构建
+        timeout (time: 1, unit: 'HOURS')
+        // 表示保留3次构建历史
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+        // 打印日志带上对应时间
+        timestamps()
+        //重试1次
+        retry(1)
+    }
+
+    //参数化构建选项
+    parameters {
+        choice choices: ['deploy', 'rollback', 'restart'], description: 'deploy 发布 / rollback  回滚 / restart 重启', name: 'deploy_option'
+        gitParameter branch: '', branchFilter: '.*', defaultValue: '', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH_TAG'
+        choice choices: ['dev', 'sit'], description: '发布环境(dev 开发环境 / sit 测试环境)', name: 'deploy_env'
+    }
+
+    environment {
+        //项目名称
+        PROJECT_NAME="mengxiu-dashboard"
+        //项目端口
+        PROJECT_PORT="8088"
+        //dev环境端口
+        PROJECT_PORT_DEV="8088"
+        //当前选则分支
+        GIT_BRANCH_PARAM="${branch}"
+        //git 分支数字
+        GIT_BRANCH="${GIT_BRANCH_PARAM}".substring("${GIT_BRANCH_PARAM}".indexOf("/") + 1)
+        //git地址
+        GIT_ADDR="http://hqlv:RK2qoApf_5NFbd8Rz36Y@10.200.200.16/mengxiu/mengxiu-dashboard.git"
+        //发布环境
+        ENVI="${deploy_env}"
+        //harbor地址
+        HARBOR_HOST="172.30.41.248"
+        //harbor的项目名称，类似分组
+        HARBOR_PROJECT="mengxiu"
+        //harbor的用户名
+        HARBOR_USERNAME="admin"
+        //harbor的密码
+        HARBOR_PWD="Harbor12345"
+        IMAGE_NAME="mengxiu-dashboard"
+        //IMAGE_TAG="1.0.0"
+        //镜像tag
+        IMAGE_TAG="${GIT_BRANCH_PARAM}".substring("${GIT_BRANCH_PARAM}".lastIndexOf("/") + 1)
+        //镜像地址
+        IMAGE_ADDR="${HARBOR_HOST}/${HARBOR_PROJECT}/${ENVI}/${IMAGE_NAME}"
+        DOCKERFILE_DIR="dashboard-web-python"
+        //发布目标服务器名称，配置在jenkins
+        //DEPLOY_SERVER="172.30.41.15"
+        DEPLOY_SERVER="172.30.41.16"
+        //发布目标服务器名称，dev环境
+        DEPLOY_SERVER_DEV="10.200.200.145"
+        //当前的操作类型，发布、回滚、重启
+        DEPLOY_OPTION="${deploy_option}"
+        //发布方式： ansible / shell_script
+        DEPLOY_WAY="shell_script"
+        //发布的脚本路径
+        DEPLOY_SHELL_PATH="/opt/appl/spring-cloud/deploy_web_docker.sh"
+        //企业微信通知url
+        POST_QYWX_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1e721f28-5d52-4e7f-9a1d-78f8a79414b0"
+    }
+
+    stages {
+
+        stage('拉取代码') {
+            when { expression { params.deploy_option == "deploy" } }
+            steps {
+                echo 'This is clone code step'
+                echo '当前拉取的代码原始版本是：' + "${GIT_BRANCH_PARAM}" + '，经过处理之后的版本是：' + "${GIT_BRANCH}"
+                git branch: "${GIT_BRANCH}", url: "${GIT_ADDR}"
+                //上面是使用脚本的方式，后期优化成采用scm的方式
+                //checkout scm
+            }
+        }
+
+        stage('镜像构建env=dev') {
+            when { expression { params.deploy_env == "dev" && params.deploy_option == "deploy" } }
+            environment {
+                PROJECT_PORT="${PROJECT_PORT_DEV}"
+            }
+
+            steps {
+                echo 'This is a docker image build and push step(env=dev)'
+                sh '''
+                    old_image_id=`docker images|grep ${IMAGE_NAME}|awk '{print $3}'`
+                    if [[ -n "${old_image_id}" ]]; then
+                        docker rmi -f ${old_image_id}
+                    fi
+
+                    docker build -f ${DOCKERFILE_DIR}/Dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKERFILE_DIR}/
+
+                    new_image_id=`docker images|grep ${IMAGE_NAME}|grep ${IMAGE_TAG}|awk '{print $3}'`
+                    docker tag ${new_image_id} ${IMAGE_ADDR}:${IMAGE_TAG}
+                    docker login -u ${HARBOR_USERNAME} -p ${HARBOR_PWD} ${HARBOR_HOST}
+                    docker push ${IMAGE_ADDR}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('使用Shell Script发布env=dev)') {
+            when { expression { params.deploy_env == "dev" && "${DEPLOY_WAY}" == "shell_script"} }
+            steps{
+                echo 'This is a deploy docker image step(env=dev)'
+                sshPublisher(publishers: [sshPublisherDesc(configName: "$DEPLOY_SERVER", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "$DEPLOY_SHELL_PATH", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            }
+        }
+
+        stage('使用ansible playbook发布env=dev)') {
+            when { expression { params.deploy_env == "dev" && "${DEPLOY_WAY}" == "ansible"} }
+            steps{
+                echo 'This is a deploy docker image step(env=dev)'
+
+                script {
+                    ansiblePlaybook(
+                        inventory: '/etc/ansible/hosts', // 这里填写你的主机清单文件路径
+                        playbook: '/opt/appl/devops/ansible/mengxiu-dashboard/playbook.yml' // 这里填写你的 Ansible playbook 文件路径
+                    )
+                }
+            }
+        }
+
+    }
+
+    post {
+        success {
+            qyWechatNotification mentionedId: '', mentionedMobile: '', moreInfo: '', webhookUrl: "$POST_QYWX_URL"
+        }
+        failure{
+            qyWechatNotification mentionedId: '', mentionedMobile: '', moreInfo: '', webhookUrl: "$POST_QYWX_URL"
+        }
+    }
+
+}

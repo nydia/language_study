@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>盟秀-Dashboard</title>
+</head>
+<body>
+<h1>{{ title }}</h1>
+<table width="1200" height="600">
+    <tr>
+        <td class="td-class">Jenkins发布</td>
+        <td class="td-class">资源详情</td>
+    </tr>
+    <tr>
+        <td>
+            <table width="800" height="200">
+                <tr>
+                    <td class="td-class">类型</td>
+                    <td class="td-class">名称</td>
+                    <td class="td-class">服务IP</td>
+                    <td class="td-class" colspan="3">操作</td>
+                </tr>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.type}}</td>
+                    <td>{{ post.job_name}}</td>
+                    <td>{{ post.deploy_host_sit}}(sit)<br/>{{ post.deploy_host_dev}}(dev)</td>
+                    <td><a onclick="depolyJob('{{post.job_name}}')">发布</a></td>
+                    <td><a onclick="javascript:void(0);">回滚</a></td>
+                    <td><a onclick="javascript:void(0);">重启</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+        <td>
+            <table width="1000" height="50">
+                <tr>
+                    <td class="td-class">ID</td>
+                    <td class="td-class">环境</td>
+                    <td class="td-class td-height">机器IP</td>
+                    <td class="td-class">总内存(M)</td>
+                    <td class="td-class">已用内存(M)</td>
+                    <td class="td-class">可用内存(M)</td>
+                    <td class="td-class">总CPU时间(m)</td>
+                    <td class="td-class">已用CPU时间(m)</td>
+                    <td class="td-class">CPU使用率</td>
+                    <td class="td-class">操作</td>
+                </tr>
+                {% for post in machine_list %}
+                <tr>
+                    <td class="td-class">{{ post.id }}</td>
+                    <td class="td-class">{{ post.env }}</td>
+                    <td class="td-class">{{ post.ip }}</td>
+                    <td class="td-class">{{ post.mem_total }}</td>
+                    <td class="td-class">{{ post.mem_use }}</td>
+                    <td class="td-class">{{ post.mem_available }}</td>
+                    <td class="td-class">{{ post.cpu_total }}</td>
+                    <td class="td-class">{{ post.cpu_use }}</td>
+                    <td class="td-class">{{ post.cpu_rate }}</td>
+                    <td class="td-class"><a onclick="javascript:get_machine_info('{{post.id}}');">获取服务器信息</a></td>
+
+                </tr>
+                {% endfor %}
+            </table>
+            </table>
+        </td>
+    </tr>
+
+
+</table>
+<style>
+    table,table td,table th { border: 1px solid #ff0000; border-collapse: collapse ;} 
+    /* 在鼠标悬停时改变字体颜色 */
+    a:hover {
+        color: blue;
+        text-decoration: underline; /* 可选：添加下划线 */
+        cursor: pointer;
+    }
+    /* 在鼠标悬停时改变背景颜色 */
+    a.button:hover {
+        background-color: lightgray;
+    }
+    .td-class{
+        text-align: center;
+        height: 20px;
+    }
+    .td-height{
+        height: 20px;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+    function get_machine_info(id){
+        fetch('http://localhost:8088/machineInfo?machine_id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(data);
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('Fetch error:', error);
+            });
+    }
+
+
+    function depolyJob(job_name){
+        console.log(job_name);
+        //var PythonShell = require('python-shell');
+        //PythonShell.run('main_v3.py', function (err, results) {
+        //    if (err) throw err;
+        //    console.log(results);
+        //});
+        $.get('/deploy/' + job_name, {}, function(res) {
+            console.log(res)
+            var newPage = window.open("about:blank", "_blank");
+            newPage.document.write(res);
+        })
+    }
+
+</script>
+</body>
+</html>

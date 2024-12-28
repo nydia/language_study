@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.python-version
+LICENSE
+README.md
+bak/
+.dockerignore
+Dockerfile

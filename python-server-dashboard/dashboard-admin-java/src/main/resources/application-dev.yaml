@@ -1,0 +1,63 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /mengxiu-dashboard
+
+spring:
+  application:
+    name: gold-user
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.200.200.145:3310/mengxiu_dashboard?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: test
+    password: Aa!123456
+    port: 3310
+    hikari:
+      # 连接池最大连接数
+      maximum-pool-size: 12
+      # 空闲时保持最小连接数
+      minimum-idle: 5
+      # 空闲连接存活时间
+      idle-timeout: 300000
+      # 连接超时时间
+      connection-timeout: 20000
+      # 测试sql
+      connection-test-query: select 1
+
+logging:
+  level:
+    root: debug
+
+mybatis:
+  #核心配置
+  configuration:
+    #全局映射器启用缓存
+    cache-enabled: true
+    #延迟加载的全局开关。当开启时，所有关联对象都会延迟加载
+    lazy-loading-enabled: true
+    #当开启时，任何方法的调用都会加载该对象的所有属性
+    aggressive-lazy-loading: false
+    #是否允许单一语句返回多结果集
+    multiple-result-sets-enabled: true
+    #使用列标签代替列名
+    use-column-label: true
+    #指定 MyBatis 应如何自动映射列到字段或属性。 none 表示取消自动映射；partial 只会自动映射没有定义嵌套结果集映射的结果集。 full 会自动映射任意复杂的结果集（无论是否嵌套）
+    auto-mapping-behavior: full
+    #设置超时时间，它决定驱动等待数据库响应的秒数
+    default-statement-timeout: 180
+    #当没有为参数提供特定的 JDBC 类型时，为空值指定 JDBC 类型。 某些驱动需要指定列的 JDBC 类型，多数情况直接用一般类型即可，比如 null、varchar 或 other
+    jdbc-type-for-null: null
+    #默认session，即同一session中，相同的SQL语句只能执行一次。当作用域改为statement时，同一session中，相同SQL可执行多次
+    local-cache-scope: session
+  #Locations of Mapper xml config file.
+  mapper-locations:
+    - classpath*:/mapper/*.xml
+  # alias
+  type-aliases-package: com.mengxiu.dashboard.entity
+
+servers:
+  server1:
+    server-id: ng
+    host-ip: 172.30.42.63
+    username: oper
+    pub-key-path: /home/oper/.ssh/id_rsa

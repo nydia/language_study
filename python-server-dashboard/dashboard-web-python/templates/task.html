@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>盟秀-Dashboard</title>
+    </head>
+    <body>
+        <script>
+            fetch("/task_opt/task/start")
+                .then(response => response.json())
+                .then(data => {
+                    // 处理获取的数据
+                    console.log(JSON.stringify(data))
+                    alert(JSON.stringify(data))
+
+                    window.close()
+                })
+                .catch(error => {
+                    // 处理错误
+                    alert("[" + error + "]")
+                    if(error==""||error==null||error==undefined){
+                        window.close()
+                    } else {
+                        alert("Fetch error:", error)
+                    }
+                    
+                })
+        </script>
+    </body>
+</html>

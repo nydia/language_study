@@ -1,0 +1,121 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+# Ex 1: Ungrouped hosts, specify before any group headers.
+
+## green.example.com
+## blue.example.com
+## 192.168.100.1
+## 192.168.100.10
+
+# Ex 2: A collection of hosts belonging to the 'webservers' group
+
+## [webservers]
+## alpha.example.org
+## beta.example.org
+## 192.168.1.100
+## 192.168.1.110
+
+# If you have multiple hosts following a pattern you can specify
+# them like this:
+
+## www[001:006].example.com
+
+# Ex 3: A collection of database servers in the 'dbservers' group
+
+## [dbservers]
+## 
+## db01.intranet.mydomain.net
+## db02.intranet.mydomain.net
+## 10.25.1.56
+## 10.25.1.57
+
+# Here's another example of host ranges, this time there are no
+# leading 0s:
+
+## db-[99:101]-node.example.com
+
+## mengxiu
+
+[sh-dev]
+10.200.200.145 ansible_ssh_host=10.200.200.145 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+
+[sz-dev]
+172.30.41.16 ansible_ssh_host=172.30.41.16 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@1" ansible_ssh_port=22
+172.30.41.15 ansible_ssh_host=172.30.41.15 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@1" ansible_ssh_port=22
+
+[sz-sit]
+172.30.42.10 ansible_ssh_host=172.30.42.10 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.11 ansible_ssh_host=172.30.42.11 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.12 ansible_ssh_host=172.30.42.12 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.13 ansible_ssh_host=172.30.42.13 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.14 ansible_ssh_host=172.30.42.14 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.15 ansible_ssh_host=172.30.42.15 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.64 ansible_ssh_host=172.30.42.64 ansible_ssh_user="imipay" ansible_ssh_pass="BigBox" ansible_ssh_port=22
+172.30.42.66 ansible_ssh_host=172.30.42.66 ansible_ssh_user="imipay" ansible_ssh_pass="BigBox" ansible_ssh_port=22
+172.30.42.82 ansible_ssh_host=172.30.42.82 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.83 ansible_ssh_host=172.30.42.83 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.84 ansible_ssh_host=172.30.42.84 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.75 ansible_ssh_host=172.30.42.75 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.76 ansible_ssh_host=172.30.42.76 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.77 ansible_ssh_host=172.30.42.77 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.63 ansible_ssh_host=172.30.42.63 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.48 ansible_ssh_host=172.30.42.48 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.49 ansible_ssh_host=172.30.42.49 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.50 ansible_ssh_host=172.30.42.50 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.55 ansible_ssh_host=172.30.42.55 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.56 ansible_ssh_host=172.30.42.56 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+172.30.42.57 ansible_ssh_host=172.30.42.57 ansible_ssh_user="oper" ansible_ssh_pass="oper#wsx@test1" ansible_ssh_port=22
+
+[sz-pit]
+172.30.43.201 ansible_ssh_host=172.30.43.201 ansible_ssh_user="imipay" ansible_ssh_pass="BigBox" ansible_ssh_port=22
+172.30.43.202 ansible_ssh_host=172.30.43.202 ansible_ssh_user="imipay" ansible_ssh_pass="BigBox" ansible_ssh_port=22
+172.30.43.81 ansible_ssh_host=172.30.43.81 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.82 ansible_ssh_host=172.30.43.82 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.83 ansible_ssh_host=172.30.43.83 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.71 ansible_ssh_host=172.30.43.71 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.72 ansible_ssh_host=172.30.43.72 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.73 ansible_ssh_host=172.30.43.73 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.1 ansible_ssh_host=172.30.43.1 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.2 ansible_ssh_host=172.30.43.2 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.51 ansible_ssh_host=172.30.43.51 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.52 ansible_ssh_host=172.30.43.52 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.53 ansible_ssh_host=172.30.43.53 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.61 ansible_ssh_host=172.30.43.61 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.62 ansible_ssh_host=172.30.43.62 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.121 ansible_ssh_host=172.30.43.121 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.122 ansible_ssh_host=172.30.43.122 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.11 ansible_ssh_host=172.30.43.11 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.12 ansible_ssh_host=172.30.43.12 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.19 ansible_ssh_host=172.30.43.19 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.21 ansible_ssh_host=172.30.43.21 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.22 ansible_ssh_host=172.30.43.22 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.31 ansible_ssh_host=172.30.43.31 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.32 ansible_ssh_host=172.30.43.32 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.41 ansible_ssh_host=172.30.43.41 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.42 ansible_ssh_host=172.30.43.42 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.91 ansible_ssh_host=172.30.43.91 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.92 ansible_ssh_host=172.30.43.92 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.101 ansible_ssh_host=172.30.43.101 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.102 ansible_ssh_host=172.30.43.102 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.111 ansible_ssh_host=172.30.43.111 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.112 ansible_ssh_host=172.30.43.112 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.240 ansible_ssh_host=172.30.43.240 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.241 ansible_ssh_host=172.30.43.241 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.242 ansible_ssh_host=172.30.43.242 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.243 ansible_ssh_host=172.30.43.243 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.244 ansible_ssh_host=172.30.43.244 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.245 ansible_ssh_host=172.30.43.245 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.246 ansible_ssh_host=172.30.43.246 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.247 ansible_ssh_host=172.30.43.247 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.248 ansible_ssh_host=172.30.43.248 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.249 ansible_ssh_host=172.30.43.249 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.250 ansible_ssh_host=172.30.43.250 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22
+172.30.43.251 ansible_ssh_host=172.30.43.251 ansible_ssh_user="oper" ansible_ssh_pass="Qaz@mp#pit" ansible_ssh_port=22

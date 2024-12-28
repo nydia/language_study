@@ -1,0 +1,210 @@
+pipeline {
+    //agent是jenkins的工作节点
+    agent any
+
+    options {
+        timeout (time: 1, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '2'))
+        retry(1)
+    }
+
+    //采用的是maven自动安装
+    tools {
+        maven 'maven-3.9.3'
+    }
+
+    //参数化构建选项
+    parameters {
+        choice choices: ['deploy', 'rollback', 'restart'], description: 'deploy 发布 / rollback  回滚 / restart 重启', name: 'deploy_option'
+        //choice choices: ['1.0.0'], description: '回滚版本号，发布版本时候忽略', name: 'rollback_version'
+        gitParameter branch: '', branchFilter: '.*', defaultValue: '', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH_TAG'
+        choice choices: ['dev', 'sit'], description: '发布环境(dev 开发环境 / sit 测试环境)', name: 'deploy_env'
+    }
+
+    environment {
+        //项目名称
+        PROJECT_NAME="mengxiu-dashboard"
+        //项目端口
+        PROJECT_PORT="8080"
+        //dev环境端口
+        PROJECT_PORT_DEV="8080"
+        //当前选则分支
+        GIT_BRANCH_PARAM="${branch}"
+        //git 分支数字
+        GIT_BRANCH="${GIT_BRANCH_PARAM}".substring("${GIT_BRANCH_PARAM}".indexOf("/") + 1)
+        //git地址
+        GIT_ADDR="http://hqlv:RK2qoApf_5NFbd8Rz36Y@10.200.200.16/mengxiu/mengxiu-dashboard.git"
+        //发布环境
+        ENVI="${deploy_env}"
+        //jar名称
+        JAR_NAME="mengxiu-dashboard.jar"
+        //harbor地址
+        HARBOR_HOST="172.30.41.248"
+        //harbor的项目名称，类似分组
+        HARBOR_PROJECT="mengxiu"
+        //harbor的用户名
+        HARBOR_USERNAME="admin"
+        //harbor的密码
+        HARBOR_PWD="Harbor12345"
+        IMAGE_NAME="mengxiu-dashboard"
+        //IMAGE_TAG="1.0.0"
+        //镜像tag
+        IMAGE_TAG="${GIT_BRANCH_PARAM}".substring("${GIT_BRANCH_PARAM}".lastIndexOf("/") + 1)
+        //镜像地址
+        IMAGE_ADDR="${HARBOR_HOST}/${HARBOR_PROJECT}/${ENVI}/${IMAGE_NAME}"
+        //发布目标服务器名称，配置在jenkins
+        DEPLOY_SERVER="172.30.42.16"
+        //发布目标服务器名称，dev环境
+        DEPLOY_SERVER_DEV="10.200.200.145"
+        //当前的操作类型，发布、回滚、重启
+        DEPLOY_OPTION="${deploy_option}"
+        //企业微信通知url
+        POST_QYWX_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1a789e21-fe00-4f5a-a9d3-3cc22b6f9d0c"
+    }
+
+    stages {
+
+        stage('拉取代码') {
+            when { expression { params.deploy_option == "deploy" } }
+            steps {
+                echo 'This is Clone Code step'
+                echo '当前拉取的代码原始版本是：' + "${GIT_BRANCH_PARAM}" + '，经过处理之后的版本是：' + "${GIT_BRANCH}"
+                git branch: "${GIT_BRANCH}", url: "${GIT_ADDR}"
+                //上面是使用脚本的方式，后期优化成采用scm的方式
+                //checkout scm
+            }
+        }
+
+        stage('代码打包') {
+            when { expression { params.deploy_option == "deploy" } }
+            steps{
+                echo 'This is a Maven Build step'
+                // 在有Jenkinsfile同一个目录下（项目的根目录下）
+                sh 'mvn clean package -Dmaven.test.skip=true -Dmaven.compile.fork=true'
+            }
+        }
+
+        stage('单元测试') {
+            when { expression { params.deploy_option == "deploy" } }
+            steps{
+                echo 'This is a Unit Test step'
+            }
+        }
+
+        stage('SonarQube代码检查') {
+            when { expression { params.deploy_option == "deploy" } }
+            steps{
+                echo 'This is a SonarQube Check step'
+            }
+        }
+
+        //下面一次分为dev/sit 三个stage，根据条件执行
+        stage('镜像构建dev') {
+            when { expression { params.deploy_env == "dev" && params.deploy_option == "deploy" } }
+            environment {
+                PROJECT_PORT="${PROJECT_PORT_DEV}"
+            }
+
+            steps {
+                echo 'This is a Docker Image Build&Push step(env=dev)'
+                sh '''
+                    old_image_id=`docker images|grep ${IMAGE_NAME}|grep ${IMAGE_TAG}|awk '{print $3}'`
+                    if [[ -n "${old_image_id}" ]]; then
+                        docker rmi -f ${old_image_id}
+                    fi
+
+                    docker build -f Dockerfile --build-arg jar_name=${JAR_NAME} -t ${IMAGE_NAME}:${IMAGE_TAG} .
+
+                    new_image_id=`docker images|grep ${IMAGE_NAME}|grep ${IMAGE_TAG}|awk '{print $3}'`
+                    docker tag ${new_image_id} ${IMAGE_ADDR}:${IMAGE_TAG}
+                    docker login -u ${HARBOR_USERNAME} -p ${HARBOR_PWD} ${HARBOR_HOST}
+                    docker push ${IMAGE_ADDR}:${IMAGE_TAG}
+                '''
+            }
+        }
+        stage('镜像构建sit') {
+            when { expression { params.deploy_env == "sit" && params.deploy_option == "deploy" } }
+            steps {
+                echo 'This is a Docker Image Build&Push step(env=sit)'
+                sh '''
+                    old_image_id=`docker images|grep ${IMAGE_NAME}|grep ${IMAGE_TAG}|awk '{print $3}'`
+                    if [[ -n "${old_image_id}" ]]; then
+                        docker rmi -f ${old_image_id}
+                    fi
+
+                    docker build -f Dockerfile --build-arg jar_name=${JAR_NAME} -t ${IMAGE_NAME}:${IMAGE_TAG} .
+
+                    new_image_id=`docker images|grep ${IMAGE_NAME}|grep ${IMAGE_TAG}|awk '{print $3}'`
+                    docker tag ${new_image_id} ${IMAGE_ADDR}:${IMAGE_TAG}
+                    docker login -u ${HARBOR_USERNAME} -p ${HARBOR_PWD} ${HARBOR_HOST}
+                    docker push ${IMAGE_ADDR}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        //下面一次分为dev/sit，根据条件执行
+        stage('清理本地镜像和包(dev环境)') {
+            when { expression { params.deploy_env == "dev" && params.deploy_option == "deploy" } }
+            steps{
+                echo 'This is a jenkins Clear Image step(env=dev)'
+                //删除刚刚构建的镜像，防止存储满了 TODO
+                sh '''
+                    image_id=`docker images|grep ${IMAGE_NAME}|awk '{print $3}'`
+                    if [[ -n "${image_id}" ]]; then
+                        docker rmi -f ${image_id}
+                    fi
+                '''
+                // 在有Jenkinsfile同一个目录下（项目的根目录下）
+                sh 'mvn clean'
+            }
+        }
+        //stage('Clear Image&Package(env=sit)') {
+        stage('清理本地镜像和包(sit环境)') {
+            when { expression { params.deploy_env == "sit" && params.deploy_option == "deploy" } }
+            steps{
+                echo 'This is a jenkins Clear Image step(env=sit)'
+                //删除刚刚构建的镜像，防止存储满了 TODO
+                sh '''
+                    image_id=`docker images|grep ${IMAGE_NAME}|awk '{print $3}'`
+                    if [[ -n "${image_id}" ]]; then
+                        docker rmi -f ${image_id}
+                    fi
+                '''
+                // 在有Jenkinsfile同一个目录下（项目的根目录下）
+                sh 'mvn clean'
+            }
+        }
+
+        //下面一次分为dev/sit，根据条件执行。区分 Deploy or Restart or Rollback 在脚本里面
+        //stage('Deploy or Restart or Rollback Docker(env=dev)') {
+        stage('发布/重启/回滚dev') {
+            when { expression { params.deploy_env == "dev"} }
+            environment {
+                PROJECT_PORT="${PROJECT_PORT_DEV}"
+                DEPLOY_SERVER="${DEPLOY_SERVER_DEV}"
+            }
+            steps{
+                echo 'This is a Deploy or Restart or Rollback Docker step(env=dev)'
+                sshPublisher(publishers: [sshPublisherDesc(configName: "$DEPLOY_SERVER", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/appl/spring-cloud/deploy_docker.sh $HARBOR_HOST $HARBOR_PROJECT $IMAGE_NAME $IMAGE_TAG $PROJECT_PORT $PROJECT_NAME $ENVI $DEPLOY_OPTION ", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            }
+        }
+        stage('发布/重启/回滚sit') {
+            when { expression { params.deploy_env == "sit"} }
+            steps{
+                echo 'This is a Deploy or Restart or Rollback Docker step(env=sit)'
+                sshPublisher(publishers: [sshPublisherDesc(configName: "$DEPLOY_SERVER", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/appl/spring-cloud/deploy_docker.sh $HARBOR_HOST $HARBOR_PROJECT $IMAGE_NAME $IMAGE_TAG $PROJECT_PORT $PROJECT_NAME $ENVI $DEPLOY_OPTION ", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            }
+        }
+
+    }
+
+    post {
+        success {
+            qyWechatNotification mentionedId: '', mentionedMobile: '', moreInfo: '', webhookUrl: "$POST_QYWX_URL"
+        }
+        failure{
+            qyWechatNotification mentionedId: '', mentionedMobile: '', moreInfo: '', webhookUrl: "$POST_QYWX_URL"
+        }
+    }
+
+}

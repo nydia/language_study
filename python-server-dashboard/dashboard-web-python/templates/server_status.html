@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% from 'bootstrap4/form.html' import render_field %}
+
+{% block content %}
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>服务状态获取</h2>
+    <p></p>
+  </div>
+</div>
+
+<form action="javascript:void(0);">
+  <div class="row mb-4">
+    <label for="hostname" class="col-sm-1 col-form-label">主机名称</label>
+    <div class="col-sm-2">
+      <input type="input" class="form-control" id="hostname" placeholder="请输入主机名称,默认 all" value="all">
+    </div>
+    <div class="col-sm-2">
+      (主机名称,默认为：all)
+    </div>
+  </div>
+  <div class="row mb-4">
+    <label for="serverStatus" class="col-sm-1 col-form-label">服务状态</label>
+    <div class="col-sm-11">
+      <textarea class="form-control" id="serverStatus" rows="20" placeholder="正在获取服务状态......"></textarea>
+    </div>
+  </div>
+  
+  <div class="row mb-2">
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-info" onclick="javascript:server_status_get();">服务状态获取</button>
+    </div>
+  </div>
+  
+</form>
+
+<script>
+    //服务状态获取
+    var flag = 0;
+    function server_status_get(){
+      if(flag == 1){
+        alert("数据正在拉取，请稍等......")
+      }
+      flag = 1;
+      let hostname = document.getElementById("hostname").value;//主机名称
+      fetch("/ansible_opt/server_status?hostname="+hostname)
+            .then(response => response.json())
+            .then(data => {
+                flag = 0;
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var code = data.code
+                if(code == 200){
+                  flag = 0;
+                  //alert(data.data)
+                  if(data.data == undefined || data.data == ''){
+                    alert("未查询到服务的状态")
+                  } else {
+                    document.getElementById("serverStatus").value = data.data
+                  }
+
+                } else {
+                  alert(data.desc);
+                }
+            })
+            .catch(error => {
+                flag = 0;
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+</script>
+
+{% endblock %}

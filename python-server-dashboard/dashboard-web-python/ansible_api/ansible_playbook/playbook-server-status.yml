@@ -1,0 +1,14 @@
+---
+- name: 服务器状态
+  #hosts: 10.200.200.145
+  #hosts: all
+  hosts: '{{host_name}}'
+  # become: true / yes
+  become: true
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: debug
+      debug: 
+        msg: success

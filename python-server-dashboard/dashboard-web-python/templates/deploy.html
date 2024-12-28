@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% from 'bootstrap4/form.html' import render_field %}
+
+{% block content %}
+
+<h2>Jenkins发布</h2>
+<form method="post" action="javascript:void(0)">
+    <div class="row mb-6">
+        <div class="col-sm-6">
+            <div class="mb-3 required"><label class="form-label" for="job_name">job名称</label>
+                <input class="form-control" id="job_name" maxlength="20" minlength="1" name="job_name" required="" type="text" value="{{job_name}}" disabled>           
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-2">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_dev">发布机器IP(dev)</label>
+                <input class="form-control" id="deploy_host_dev" maxlength="20" minlength="1" name="deploy_host_dev" required="" type="text" value="{{deploy_host_dev}}" disabled>           
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_sit">发布机器IP(sit)</label>
+                <input class="form-control" id="deploy_host_sit" maxlength="20" minlength="1" name="deploy_host_sit" required="" type="text" value="{{deploy_host_sit}}" disabled>           
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_pit">发布机器IP(pit)</label>
+                <input class="form-control" id="deploy_host_pit" maxlength="20" minlength="1" name="deploy_host_pit" required="" type="text" value="阿里云AckKubernetes" disabled>           
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-6">
+            <div class="mb-3 required"><label class="form-label" for="deploy_env">发布环境</label>
+                <select class="form-select" name="deploy_env" id="deploy_env">
+                    <option value='dev'>dev</option>
+                    <option value='sit'>sit</option>
+                    <option value='uat'>uat</option>
+                    <option value='pit'>pit</option>
+                </select>          
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-6">
+            <div class="mb-3 required"><label class="form-label" for="branche_id">分支</label>
+                <select class="form-select" name="branche_id" id="branche_id">
+                    {% for branche_obj in branche_list %}
+                        <option value='{{branche_obj}}'>{{branche_obj}}</option>
+                    {% endfor %}
+                </select>            
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-6">
+            <div class="mb-3 required"><label class="form-label" for="pit_auto_apply">是否发布到阿里云</label>
+                <select class="form-select" name="pit_auto_apply" id="pit_auto_apply">
+                    <option value='0'>否</option>
+                    <option value='1'>是</option>
+                </select>        
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-1">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_dev"></label>
+                <button type="submit" class="btn btn-primary btn-sm" onclick="javascript:buildJob('{{job_name}}', 'deploy');">发布</button>
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_sit"></label>
+                <button type="submit" class="btn btn-primary btn-sm" onclick="javascript:buildJob('{{job_name}}', 'rollback');">重启</button>           
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_pit"></label>
+                <button type="submit" class="btn btn-danger btn-sm" onclick="javascript:buildJob('{{job_name}}', 'restart');">回滚</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-6">
+        <div class="col-sm-6">
+            <div class="mb-3 required"><label class="form-label" for="deploy_host_dev">日志</label>
+                <textarea ref="textarea" rows="12" v-model="value" class="textarea" cols="120" name="logtext" id="logtext">日志加载中...</textarea>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+    function buildJob(job_name, deploy_option) {
+        var deploy_env = $('#deploy_env option:selected').val();
+        var branche_id = $('#branche_id option:selected').val();
+        var pit_auto_apply = $('#pit_auto_apply option:selected').val();
+        console.log(job_name + deploy_env + branche_id + pit_auto_apply);
+        $.get("/jenkins_opt/build", {
+            "job_name": job_name,
+            "deploy_option": deploy_option,
+            "deploy_env": deploy_env,
+            "branche": branche_id,
+            "pit_flg": pit_auto_apply
+        }, function (res) {
+            console.log(res)
+        });
+        consoleOutput(job_name, 20000)
+    }
+
+    function consoleOutput(job_name, sleepTm){
+        //此处需要休眠20秒, 因为调起jenkins开始执行任务需要很长时间,基本在15秒左右, demo任务不算
+        //第一次调用修眠20秒, 后面5秒打印一次
+        sleep(sleepTm)
+        $.get("/jenkins_opt/buildLog", {
+            "job_name": job_name
+        }, function (resp) {
+            //如果此时任务已经执行结束, 最后一次的日志不覆盖
+            if(!resp.data.build_status){
+                return false;
+            }
+            $('#logtext').html(resp.data.out_log);
+            if(resp.data.build_status){
+                consoleOutput(job_name, 5000)
+            }
+        });
+    }
+
+    function sleep(time){
+        var timeStamp = new Date().getTime();
+        var endTime = timeStamp + time;
+        while(true){
+            if (new Date().getTime() > endTime){
+                return;
+            } 
+        }
+    }
+
+</script>
+
+
+{% endblock %}

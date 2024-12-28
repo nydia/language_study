@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% from 'bootstrap4/form.html' import render_field %}
+
+{% block content %}
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>缓存获取(sit环境)</h2>
+  </div>
+</div>
+
+<form action="javascript:void(0);">
+  <div class="row mb-3">
+    <label for="cacheKey" class="col-sm-1 col-form-label">缓存key：</label>
+    <div class="col-sm-3">
+      <input type="input" class="form-control" id="cacheKey" placeholder="请输入缓存key">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="cacheValue" class="col-sm-1 col-form-label">缓存value：</label>
+    <div class="col-sm-3">
+      <textarea class="form-control" id="cacheValue" rows="4" placeholder=""></textarea>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="" class="col-sm-1 col-form-label">操作：</label>
+    <div class="col-sm-3">
+      <button type="submit" class="btn btn-outline-danger" id="btn" onclick="javascript:get_cache();">获取cache</button>
+    </div>
+  </div>
+</form>
+
+<br/>
+<hr/>
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>缓存设置(sit环境)</h2>
+  </div>
+</div>
+
+<form action="javascript:void(0);">
+  <div class="row mb-3">
+    <label for="setCacheKey" class="col-sm-1 col-form-label">缓存key：</label>
+    <div class="col-sm-3">
+      <input type="input" class="form-control" id="setCacheKey" placeholder="请输入缓存key">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="setCacheValue" class="col-sm-1 col-form-label">缓存value：</label>
+    <div class="col-sm-3">
+      <input type="input" class="form-control" id="setCacheValue" placeholder="请输入缓存value">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="" class="col-sm-1 col-form-label">操作：</label>
+    <div class="col-sm-3">
+      <button type="submit" class="btn btn-outline-danger" id="btn" onclick="javascript:set_cache();">设置cache</button>
+    </div>
+  </div>
+</form>
+
+<br/>
+<hr/>
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>注意事项：</h2>
+    <p>
+      <h4>1. 短信发送缓存key说明: </h4>
+      格式：手机号+业务类型+_verify_code
+      </br>
+      比如：1830186607602__verify_code
+    </p>
+  </div>
+</div>
+
+<script>
+    //查询缓存
+    function get_cache() {
+        let cacheKey = document.getElementById("cacheKey").value;
+        fetch("/cache_opt/get?key=" + cacheKey)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var code = data.code
+                if(code == 200){
+                  //alert(data.data)
+                  if(data.data == undefined || data.data == ''){
+                    alert("未查询到关联key对应的值")
+                  } else {
+                    document.getElementById("cacheValue").value = data.data
+                  }
+
+                } else {
+                  alert(data.desc)
+                }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+    //设置缓存
+    function set_cache() {
+        let cacheKey = document.getElementById("setCacheKey").value;
+        let cacheValue = document.getElementById("setCacheValue").value;
+        fetch("/cache_opt/set?key=" + cacheKey + "&val=" + cacheValue)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var code = data.code
+                if(code == 200){
+                  alert("设置成功!")
+                } else {
+                  alert(data.desc)
+                }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+</script>
+
+{% endblock %}

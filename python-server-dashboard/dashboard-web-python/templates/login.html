@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% from 'bootstrap4/form.html' import render_field %}
+
+{% block content %}
+<form method="post" action="{{ url_for('login') }}">
+    {{ form.csrf_token }}
+    {{ render_field(form.username, placeholder='请输入用户名') }}
+    {{ render_field(form.password, placeholder='请输入密码') }} </br>
+    {{ render_field(form.submit) }} (admin/Aa111111)
+</form>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+    
+</script>
+
+{% endblock %}

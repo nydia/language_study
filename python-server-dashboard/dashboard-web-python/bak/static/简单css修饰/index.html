@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>盟秀-Dashboard</title>
+        <style>
+            .mx-dashboard {width: 100%; }
+            .mx-dashboard > div > div:nth-child(1) {
+                border: 1px solid #e6e8e9;
+                border-bottom: none;
+                padding-left: 16px;
+                background: #f4f6fa;
+                font-weight: 600;
+                color: #333;
+                line-height: 50px;
+                font-size: 20px; }
+            .mx-dashboard > div > table {
+                width: 100%; }
+                .mx-dashboard > div > table > thead {
+                height: 50px;
+                background: #f4f6fa;
+                font-weight: 500;
+                color: #333;
+                line-height: 20px;
+                font-size: 18px; }
+                .mx-dashboard > div > table > thead tr td {
+                    padding: 8px;
+                    font-size: 16px;
+                    color: #333;
+                    line-height: 20px; }
+                .mx-dashboard > div > table > tbody tr td {
+                padding: 8px;
+                font-size: 16px;
+                color: #333;
+                line-height: 20px; }
+            .mx-dashboard > div:nth-child(1) {
+                margin-bottom: 16px; }
+                .mx-dashboard > div:nth-child(1) .btn {
+                width: 80px; }
+            .mx-dashboard > div:nth-child(2) .btn {
+                width: 160px; }
+            .mx-dashboard .btn a {
+                box-sizing: border-box;
+                text-align: center;
+                border-radius: 4px;
+                display: block;
+                z-index: 1;
+                position: relative;
+                font-size: inherit;
+                font-family: inherit;
+                color: #333;
+                padding: 8px 16px;
+                outline: none;
+                border: 1px solid #dcdfe6;
+                overflow: hidden;
+                transition: color 0.4s ease-in-out; }
+            .mx-dashboard .btn a::before {
+                content: "";
+                z-index: -1;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1em;
+                height: 1em;
+                border-radius: 50%;
+                background-color: #409eff;
+                color: #fff;
+                border: 1px solid #409eff;
+                transform-origin: center;
+                transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
+                transition: transform 0.45s ease-in-out; }
+            .mx-dashboard .btn a:hover {
+                cursor: pointer;
+                color: #fff;
+                border: 1px solid #409eff;
+                border-radius: 4px; }
+            .mx-dashboard .btn a:hover::before {
+                transform: translate3d(-50%, -50%, 0) scale3d(15, 15, 15); }
+
+            body {
+            margin: 0;
+            padding: 16px;
+            min-width: 1100px; }
+
+            h1 {
+            margin: 0;
+            margin-bottom: 16px; }
+
+            table,
+            table td,
+            table th {
+            border: 1px solid #e6e8e9;
+            border-collapse: collapse; }
+        </style>
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <div class="mx-dashboard">
+            <div>
+                <div>Jenkins发布</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>类型</td>
+                            <td>名称</td>
+                            <td>服务IP</td>
+                            <td colspan="1">操作</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for post in posts %}
+                        <tr>
+                            <td>{{ post.type}}</td>
+                            <td>{{ post.job_name}}</td>
+                            <td>
+                                {{ post.deploy_host_sit}}(sit)
+                                <br />
+                                {{ post.deploy_host_dev}}(dev)
+                            </td>
+                            <td class="btn"><a onclick="deploy_option('{{post.job_name}}', '{{post.project_id}}')">发布</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <div>资源详情</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>环境</td>
+                            <td>机器IP</td>
+                            <td>总内存(M)</td>
+                            <td>已用内存(M)</td>
+                            <td>可用内存(M)</td>
+                            <td>总CPU时间(m)</td>
+                            <td>已用CPU时间(m)</td>
+                            <td>CPU使用率</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for post in machine_list %}
+                        <tr>
+                            <td>{{ post.id }}</td>
+                            <td>{{ post.env }}</td>
+                            <td>{{ post.ip }}</td>
+                            <td>{{ post.mem_total }}</td>
+                            <td>{{ post.mem_use }}</td>
+                            <td>{{ post.mem_available }}</td>
+                            <td>{{ post.cpu_total }}</td>
+                            <td>{{ post.cpu_use }}</td>
+                            <td>{{ post.cpu_rate }}</td>
+                            <td class="btn"><a onclick="javascript:get_machine_info('{{post.id}}');">获取服务器信息</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            function get_machine_info(id) {
+                fetch("/machineInfo?machine_id=" + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // 处理获取的数据
+                        console.log(JSON.stringify(data))
+                        alert(JSON.stringify(data))
+                    })
+                    .catch(error => {
+                        // 处理错误
+                        console.error("Fetch error:", error)
+                    })
+            }
+
+            function deploy_option(job_name, project_id) {
+                console.log(job_name + project_id);
+                //var PythonShell = require('python-shell');
+                //PythonShell.run('main_v3.py', function (err, results) {
+                //    if (err) throw err;
+                //    console.log(results);
+                //});
+                $.get("/deploy_option", {"job_name":job_name,"project_id":project_id}, function (res) {
+                    console.log(res)
+                    var newPage = window.open("about:blank", "_blank")
+                    newPage.document.write(res)
+                })
+            }
+        </script>
+    </body>
+</html>

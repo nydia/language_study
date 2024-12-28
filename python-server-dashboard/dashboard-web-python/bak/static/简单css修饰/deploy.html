@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>盟秀-Dashboard</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 16px;
+                min-width: 1100px;
+            }
+
+            h1 {
+                margin: 0;
+                margin-bottom: 16px;
+            }
+
+            #deploy table,
+            #deploy table td,
+            #deploy table th {
+                border: 1px solid #ff0000;
+                border-collapse: collapse;
+            }
+            #deploy .btn > div {
+                display: flex;
+            }
+            #deploy .btn a {
+                margin-right: 8px;
+                width: 80px;
+                box-sizing: border-box;
+                text-align: center;
+                border-radius: 4px;
+                display: block;
+                z-index: 1;
+                position: relative;
+                font-size: inherit;
+                font-family: inherit;
+                color: #333;
+                padding: 8px 16px;
+                outline: none;
+                border: 1px solid #dcdfe6;
+                overflow: hidden;
+                transition: color 0.4s ease-in-out;
+            }
+            #deploy .btn a::before {
+                content: "";
+                z-index: -1;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1em;
+                height: 1em;
+                border-radius: 50%;
+                background-color: #409eff;
+                color: #fff;
+                border: 1px solid #409eff;
+                transform-origin: center;
+                transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
+                transition: transform 0.45s ease-in-out;
+            }
+            #deploy .btn a:hover {
+                cursor: pointer;
+                color: #fff;
+                border: 1px solid #409eff;
+                border-radius: 4px;
+            }
+            #deploy .btn a:hover::before {
+                transform: translate3d(-50%, -50%, 0) scale3d(15, 15, 15);
+            }
+            #deploy table tr td {
+                border: 1px solid #e6e8e9;
+                border-collapse: collapse;
+            }
+            #deploy table tr td:nth-child(1) {
+                background: #f4f6fa;
+                font-weight: 500;
+                color: #333;
+                line-height: 20px;
+                font-size: 18px;
+                padding: 8px;
+            }
+            #deploy table tr td:nth-child(2) {
+                font-weight: 500;
+                color: #333;
+                line-height: 20px;
+                font-size: 18px;
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body id="deploy">
+        <h1>{{ title }}</h1>
+        <table width="600" height="500">
+            <tr>
+                <td>Jenkins发布</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>job名称</td>
+                <td>{{job_name}}</td>
+            </tr>
+            <tr>
+                <td>发布机器IP</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>发布环境</td>
+                <td>
+                    <select name="deploy_env" id="deploy_env">
+                        <option value='dev'>dev</option>
+                        <option value='sit'>sit</option>
+                        <option value='uat'>uat</option>
+                        <option value='pit'>pit</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>分支</td>
+                <td>
+                    <select name="branche_id" id="branche_id">
+                        {% for branche_obj in branche_list %}
+                            <option value='{{branche_obj}}'>{{branche_obj}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>是否发布到阿里云</td>
+                <td>
+                    <select name="pit_auto_apply" id="pit_auto_apply">
+                        <option value='0'>否</option>
+                        <option value='1'>是</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>操作</td>
+                <td class="btn">
+                    <div>
+                        <a onclick="javascript:buildJob('{{job_name}}', 'deploy');">发布</a>
+                        <a onclick="javascript:buildJob('{{job_name}}', 'rollback');">回滚</a>
+                        <a onclick="javascript:buildJob('{{job_name}}', 'restart');">重启</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            function buildJob(job_name, deploy_option) {
+                var deploy_env = $('#deploy_env option:selected').val();
+                var branche_id = $('#branche_id option:selected').val();
+                var pit_auto_apply = $('#pit_auto_apply option:selected').val();
+                console.log(job_name + deploy_env + branche_id + pit_auto_apply);
+                $.get("/build", {
+                    "job_name": job_name,
+                    "deploy_option": deploy_option,
+                    "deploy_env": deploy_env,
+                    "branche": branche_id,
+                    "pit_flg": pit_auto_apply
+                }, function (res) {
+                    console.log(res)
+                })
+            }
+        </script>
+    </body>
+</html>

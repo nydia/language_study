@@ -124,3 +124,5 @@ dmypy.json
 cython_debug/
 
 
+/python-server-dashboard/venv3/**
+/python-server-dashboard/venv311/**

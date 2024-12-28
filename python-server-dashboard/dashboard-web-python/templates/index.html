@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/table.html' import render_table %}
+
+{% block content %}
+<h2>Jenkins发布</h2>
+<div class="table-responsive-sm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">类型</th>
+                <th scope="col">名称</th>
+                <th scope="col">DEV服务</th>
+                <th scope="col">SIT服务</th>
+                <th scope="col">PIT服务</th>
+                <th scope="col" colspan="2">服务状态</th>
+                <th scope="col" colspan="1">操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for post in job_list %}
+            <tr>
+                <td>{{ post.type}}</td>
+                <td>{{ post.job_name}}</td>
+                <td>{{ post.deploy_host_dev}}</td>
+                <td>{{ post.deploy_host_sit}}</td>
+                <td>阿里云AckKubernetes</td>
+                <td>
+                    {% if post.env_dev_status !='' %}
+                    dev(<span class="text-primary">{{post.env_dev_status}}</span>)
+                    {% endif %}
+                </td>
+                <td>
+                    {% if post.env_sit_status !='' %}
+                    sit(<span class="text-primary">{{post.env_sit_status}}</span>)
+                    {% endif %}
+                </td>
+                <td class="btn">
+                    <button type="submit" class="btn btn-outline-success mb-3" onclick="deploy_option('{{post.id}}')">发布</button>
+                    <button type="submit" class="btn btn-outline-success mb-3" onclick="get_server_info('{{post.id}}')">更新服务状态</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<h2>资源详情</h2>
+<div class="table-responsive-sm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">环境</th>
+                <th scope="col">机器IP</th>
+                <th scope="col">总内存(M)</th>
+                <th scope="col">已用内存(M)</th>
+                <th scope="col">可用内存(M)</th>
+                <th scope="col">总CPU时间(m)</th>
+                <th scope="col">已用CPU时间(m)</th>
+                <th scope="col">CPU使用率</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for post in machine_list %}
+            <tr>
+                <th scope="col">{{ post.id }}</th>
+                <td>{{ post.env }}</td>
+                <td>{{ post.ip }}</td>
+                <td>{{ post.mem_total }}</td>
+                <td>{{ post.mem_use }}</td>
+                <td>{{ post.mem_available }}</td>
+                <td>{{ post.cpu_total }}</td>
+                <td>{{ post.cpu_use }}</td>
+                <td>{{ post.cpu_rate }}</td>
+                <td class="btn">
+                    <button type="submit" class="btn btn-outline-success mb-3" onclick="javascript:get_machine_info('{{post.id}}');">同步服务器信息</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+    //获取机器信息
+    function get_machine_info(id) {
+        fetch("/machine_opt/machineInfo?machine_id=" + id)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                alert(JSON.stringify(data))
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+
+    //获取应用服务状态
+    function get_server_info(id) {
+        fetch("/machine_opt/get_server_info?job_id=" + id)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                alert(JSON.stringify(data))
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+
+    //服务发布
+    function deploy_option(job_id) {
+        console.log("job_id >>>" + job_id);
+        //var PythonShell = require('python-shell');
+        //PythonShell.run('main_v3.py', function (err, results) {
+        //    if (err) throw err;
+        //    console.log(results);
+        //});
+        $.get("/jenkins_opt/deploy_option", {"job_id":job_id}, function (res) {
+            console.log(res)
+            var newPage = window.open("about:blank", "_blank")
+            newPage.document.write(res)
+        })
+    }
+</script>
+
+{% endblock %}

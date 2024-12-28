@@ -1,0 +1,60 @@
+database:
+  mysql: 
+    username: test
+    password: Aa!123456
+    host: 10.200.200.145
+    port: 3310
+    db: mengxiu_dashboard
+    charset: utf8
+jenkins: 
+  url: http://172.30.41.249:8080/
+  username: admin
+  password: admin
+machine: 
+  dev-sh: 
+    user: oper
+    pass: oper#wsx@test1
+  dev: 
+    user: oper
+    pass: oper#wsx@1
+  sit: 
+    user: oper
+    pass: oper#wsx@test1
+  uat: 
+    user: oper
+    pass: oper#wsx@test1
+  pit: 
+    user: oper
+    pass: Qaz@mp#pit
+gitlab:
+  url: http://10.200.200.16/
+  token: KL5BSixGCaG_fvZxEH69
+  user-id: 14
+cache:
+  type: redis
+  timeout: 3000
+  redis: 
+    host: 172.30.42.76
+    port: 6379
+    password: iboxpay
+    db: 1
+    max_connections: 100
+    master-node-name: iboxpay-redis-pro
+    sentinel-nodes: 
+      - 
+        - 172.30.42.75
+        - 26379
+      - 
+        - 172.30.42.76 
+        - 36379
+      - 
+        - 172.30.42.77 
+        - 46379
+auth:
+  no_auth_url: /login
+  token_key: user-admin
+  jwt_secret: fdasfafdfdas1212
+operation:
+  del_soa_shell_host: 172.30.42.12
+  sit_web_deploy_host: 172.30.42.63
+  sms_aes_key: LhZYZuZ9mgeMGH6r

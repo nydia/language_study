@@ -1,0 +1,110 @@
+---
+- name: 检查是否安装 Python 3
+  hosts: 172.30.41.15
+  # become: true / yes
+  become: true
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: 检查 Python 3 是否已安装
+      command: python3 --version
+      register: python_check
+      ignore_errors: true
+
+    - name: 安装 Python 3
+      command: yum install -y python3
+      when: "python_check.rc != 0"
+
+- name: 检查是否安装 Python pip3
+  hosts: 172.30.41.15
+  # become: true / yes
+  become: true
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: 检查 Python pip3 是否已安装
+      command: which pip3
+      register: pip3_check
+      ignore_errors: true
+
+    - name: 安装 pip3 模块(pip3、requests、docker)
+      shell: |
+        yum install -y python3-pip
+        pip3 install requests
+        pip3 install docker
+        yum install -y gcc
+      when: "pip3_check.rc != 0"
+
+- name: 部署 Docker 镜像到远程服务器
+  hosts: 172.30.41.15
+  # become: true / yes
+  become: true
+  become_user: root
+  become_method: sudo
+
+  vars:
+    project_name: mengxiu-demo
+    docker_register_url: 172.30.41.248
+    docker_register_user: admin
+    docker_register_pass: Harbor12345
+    image_name: 172.30.41.248/mengxiu/sit/mengxiu-demo:1.0.0
+    container_ports: 8080:8080
+    container_name: mengxiu-demo
+    env_envi: sit
+    ansible_python_interpreter: /usr/bin/python3
+
+  # These are the tasks to run before applying updates
+  pre_tasks:
+    - name: 登录Docker Register
+      docker_login:
+        registry_url: '{{docker_register_url}}'
+        username: '{{docker_register_user}}'
+        password: '{{docker_register_pass}}'
+
+  tasks:
+    - name: 检查容器是否存在
+      command: docker ps -a --filter name="{{container_name}}" --format {{ "{{.Names}}" }}
+      register: existing_containers
+      ignore_errors: true
+
+    - name: 停止容器
+      docker_container:
+        name: '{{container_name}}'
+        state: stopped
+      when: existing_containers.stdout_lines | length > 0
+
+    - name: 删除容器
+      docker_container:
+        name: '{{container_name}}'
+        state: absent
+      when: existing_containers.stdout_lines | length > 0
+
+    - name: 检查镜像是否存在
+      command: docker images "{{image_name}}" --format {{ "{{.Repository}}" }}
+      register: existing_images
+      ignore_errors: true
+
+    - name: 删除 Docker 镜像
+      docker_image:
+        name: '{{image_name}}'
+        state: absent
+      when: existing_images.stdout_lines | length > 0
+
+    - name: 拉取 Docker 镜像
+      docker_image:
+        name: '{{image_name}}'
+        source: pull
+
+    - name: 运行 Docker 容器
+      docker_container:
+        name: mengxiu-demo
+        image: '{{image_name}}'
+        state: started
+        ports:
+          - "{{container_ports}}"
+        volumes: 
+          - /opt/appl/spring-cloud/logs/{{project_name}}:/opt/appl/spring-cloud/logs/{{project_name}}
+        env:
+          ENVI: '{{env_envi}}'

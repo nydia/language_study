@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% from 'bootstrap4/form.html' import render_field %}
+
+{% block content %}
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>维护对账数据</h2>
+    <p>删除指定日期的对账数据。对账脚本在gold-user/gold-docs/维护工具/对账数据维护脚本/gold-soa-data-delete.sh  这个目录维护。对账脚本存放服务器：172.30.42.12 /opt/appl/spring-cloud/gold-soa-data-delete.sh。</p>
+  </div>
+</div>
+
+<form action="javascript:void(0);">
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">环境：</label>
+    <div class="col-sm-1">
+      <select class="selectpicker" id="envi" name="envi">
+        <option>dev</option>
+        <option>sit</option>
+        <option>pit</option>
+    </select>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">渠道：</label>
+    <div class="col-sm-3">
+      <select class="selectpicker" id="channel" name="channel">
+        <option>CHANNEL_1001_MOBAOPAY</option>
+        <option>CHANNEL_1001_SAND</option>
+    </select>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">对账日期：</label>
+    <div class="col-sm-3">
+      <input type="soa-date" class="form-control" id="soa-date" placeholder="请输入对账日期(格式: yyyyMMdd)">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">用户系统用户名：</label>
+    <div class="col-sm-3">
+      <input type="uname" class="form-control" id="uname" placeholder="请输入用户名">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">用户系统密码：</label>
+    <div class="col-sm-3">
+      <input type="passwd" class="form-control" id="passwd" placeholder="请输入密码">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="soa-date" class="col-sm-2 col-form-label">操作：</label>
+    <div class="col-sm-3">
+      <button type="submit" class="btn btn-outline-danger" id="soaDel" onclick="javascript:del_soa_data();">删除</button>
+    </div>
+  </div>
+</form>
+
+<br/>
+<hr/>
+
+<div class="hbg">
+    <div class="hbg_resize">
+      <h2>前端发布服务维护</h2>
+      <p>
+        <h4>1. sit 前端发布流程: </h4>
+        因为sit环境的ng服务器是centos6.9的，jenkins的服务器版本是centos7.9，sshd的加密方式不一样，
+        导致使用Publish over SSH插件发布的时候连接失败。修改源端和服务端的插件有点繁琐，所以采用了下面的中间方案: </br>
+
+        > 1. 在172.30.41.236服务器上搭建一个nfs服务器。</br>
+        > 2. 在目标nginx服务器172.30.42.63安装nfs客户端，并且把/home/oper/h5这个目录挂载到 172.30.41.236的/nfs/nginx-sit/这个目录。</br>
+        > 3. 在172.30.42.63启动一个python web服务，这个服务的作用是调用发布脚本（/home/oper/h5/deploy_sit.sh）然后报上传的静态包解压并覆盖到静态包。</br>
+        > 4. jenkins的项目的Publish over SSH的目标服务器配置成 172.30.41.236。</br>
+        > 5. jenkins打包完成之后会把包上传到 172.30.41.236的/home/oper/h5的目录下面。</br>
+        > 6. jenkins上传包之后会执行一个脚本（172.30.41.236服务器上的/home/oper/h5/nfs_sit.sh）把刚刚上传的包移动到 172.30.41.236的/nfs/nginx-sit/目录下面</br>
+        > 7. 172.30.41.236的/nfs/nginx-sit/这个目录下的包(gold.tar.gz)会自动映射到172.30.42.63的/home/oper/h5这个目录。</br>
+        > 8. 第5步骤的时候复制完的同时会调用第3步骤的静态服务(start_server_v2.py)的url，发布静态包。</br>
+
+        </br>
+        (nfs_sit.sh脚本在项目gold-h5/deploy/nfs_sit.sh 目录下维护)
+        </br>
+        
+        </br><h4>2. dev和pit发布流程: </h4>
+        > 1. jenkins打包完成之后会把包上传到 172.30.41.66的/home/oper/h5的目录下面。</br>
+        > 2. jenkins上传包之后会执行一个脚本（172.30.41.66服务器上的/home/oper/h5/deploy_dev.sh）把刚刚上传的静态文件覆盖对应的对应服务的资源。    </br>
+
+      </p>
+    </div>
+</div>
+
+<form action="javascript:void(0);">
+    <div class="row mb-2">
+      <label for="" class="col-sm-1 col-form-label">服务状态</label>
+      <div class="col-sm-2">
+        {% if sit_web_deploy_status =='true' %}
+          <button type="button" class="btn btn-outline-success">Running</button>
+        {% endif %}
+
+        {% if sit_web_deploy_status =='false' %}
+          <button type="button" class="btn btn-outline-danger">Exited</button>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="row mb-2">
+      <label for="" class="col-sm-1 col-form-label"></label>
+      <div class="col-sm-2">
+        {% if sit_web_deploy_status =='false' %}
+        <button type="button" class="btn btn-info" onclick="javascript:start_sit_web_server();">启动服务</button>
+        {% endif %}
+      </div>
+    </div>
+    
+</form>
+
+
+<br/>
+<hr/>
+
+<div class="hbg">
+  <div class="hbg_resize">
+    <h2>服务状态获取</h2>
+    <p></p>
+  </div>
+</div>
+
+<form action="javascript:void(0);">
+  <div class="row mb-6">
+    <label for="serverStatus" class="col-sm-1 col-form-label">服务状态</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" id="serverStatus" rows="10" placeholder=""></textarea>
+    </div>
+  </div>
+  
+  <div class="row mb-2">
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-info" onclick="javascript:server_status_get();">服务状态获取</button>
+    </div>
+  </div>
+  
+</form>
+
+<script>
+    //删除对账数据
+    function del_soa_data() {
+        let soa_date = document.getElementById("soa-date").value;//日期
+        let envi_select = document.getElementById ("envi"); //环境
+        let envi_val = envi_select.options[envi_select.selectedIndex].value;
+        let uname = document.getElementById("uname").value;//用户名
+        let passwd = document.getElementById("passwd").value;//密码
+        let channel_select = document.getElementById ("channel"); //渠道
+        let channel_val = channel_select.options[channel_select.selectedIndex].value;
+        fetch("/common_opt/opt_del_soa_data?soa-date=" + soa_date + "&envi=" + envi_val + "&uname=" + uname + "&passwd=" + passwd + "&channel=" + channel_val)
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var code = data.code
+                if(code == 200){
+                  alert(data.data)
+                } else {
+                  alert(data.desc)
+                }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+
+    //启动测试环境发布python服务
+    function start_sit_web_server() {
+      fetch("/common_opt/start_sit_web_deploy_server")
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                //var code = data.code
+                alert(data.desc)
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+
+    //服务状态获取
+    function server_status_get(){
+      fetch("/ansible_opt/server_status?hostname=all")
+            .then(response => response.json())
+            .then(data => {
+                // 处理获取的数据
+                console.log(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var code = data.code
+                if(code == 200){
+                  //alert(data.data)
+                  if(data.data == undefined || data.data == ''){
+                    alert("未查询到服务的状态")
+                  } else {
+                    document.getElementById("serverStatus").value = data.data
+                  }
+
+                } else {
+                  alert(data.desc)
+                }
+            })
+            .catch(error => {
+                // 处理错误
+                console.error("Fetch error:", error)
+            })
+    }
+</script>
+
+{% endblock %}

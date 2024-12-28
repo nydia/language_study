@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mengxiu.dashboard.mapper.UserMapper">
+
+  <resultMap id="resultMap" type="com.mengxiu.dashboard.entity.User">
+    <result property="id" column="id"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+  </resultMap>
+
+  <select id="selectById" parameterType="java.lang.Integer" resultType="com.mengxiu.dashboard.entity.User">
+    select id,username,password
+    from tbl_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultType="com.mengxiu.dashboard.entity.User">
+    select id,username,password
+    from tbl_user
+    where username = #{username}
+  </select>
+
+  <!-- 使用自增主键 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.mengxiu.dashboard.entity.User">
+    insert into tbl_user(username,password) values (#{username},#{password})
+  </insert>
+
+  <update id="update" parameterType="com.mengxiu.dashboard.entity.User">
+    update tbl_user set desc1 = #{desc1} where id = #{id}
+  </update>
+
+</mapper>

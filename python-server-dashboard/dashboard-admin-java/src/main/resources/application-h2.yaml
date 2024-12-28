@@ -1,0 +1,28 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /mengxiu-dashboard
+
+############################################################
+# H2
+############################################################
+spring:
+  application:
+    name: gold-user
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    hikari:
+      maximumPoolSize: 5
+      minimum-idle: 5
+      idle-timeout: 600000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+
+servers:
+  server1:
+    server-id: ng
+    host-ip: 172.30.42.63
+    username: oper
+    pub-key-path: /home/oper/.ssh/id_rsa

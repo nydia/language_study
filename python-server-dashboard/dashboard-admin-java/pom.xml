@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mengxiu.dashboard</groupId>
+		<artifactId>mengxiu-dashboard</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<groupId>com.mengxiu.dashboard</groupId>
+	<artifactId>dashboard-admin-java</artifactId>
+	<version>1.0.0</version>
+	<name>dashboard-admin-java</name>
+	<description>dashboard admin</description>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>${spring-boot-mybatis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<!-- 本地开发环境 -->
+			<id>dev</id>
+			<properties>
+				<docker.project.name>mengxiu/dev</docker.project.name>
+				<docker.registry>192.168.41.248</docker.registry>
+				<active.profiles>dev</active.profiles>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault><!-- 默认的，不加参数时执行这个profile -->
+			</activation>
+		</profile>
+		<profile>
+			<!-- SIT开发环境 -->
+			<id>sit</id>
+			<properties>
+				<docker.project.name>mengxiu/sit</docker.project.name>
+				<docker.registry>172.30.41.248</docker.registry>
+				<active.profiles>sit</active.profiles>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>mengxiu-dashboard</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.36.0</version>
+				<!--全局配置-->
+				<configuration>
+					<!--这一部分是为了实现对远程docker容器的控制-->
+					<!--docker主机地址,用于完成docker各项功能,注意是tcp不是http!-->
+					<dockerHost>tcp://${docker.registry}:2375</dockerHost>
+
+					<authConfig>
+						<push>
+							<username>admin</username>
+							<password>Harbor12345</password>
+						</push>
+					</authConfig>
+					<registry>${docker.registry}/${docker.project.name}/</registry>
+					<!--镜像相关配置,支持多镜像-->
+					<images>
+						<!-- 单个镜像配置 -->
+						<image>
+							<!--镜像名(含版本号)-->
+							<name>${docker.registry}/${docker.project.name}/${project.build.finalName}:1.0.0</name>
+							<!--别名:用于容器命名和在docker-compose.yml文件只能找到对应名字的配置-->
+							<alias>${project.build.finalName}</alias>
+							<!--镜像build相关配置-->
+							<build>
+								<!--使用dockerFile文件-->
+								<dockerFile>${project.basedir}/Dockerfile</dockerFile>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
