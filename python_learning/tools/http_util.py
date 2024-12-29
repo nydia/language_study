@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import requests
-from core.utils.log_utils import LogUtils
-from core.utils.str_utils import StrUtils
+from log_utils import LogUtils
+from str_utils import StrUtils
 
 class HttpUtils:
     def __init__(self) -> None:
