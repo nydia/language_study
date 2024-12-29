@@ -17,8 +17,9 @@ from file_util import FileUtil
     
 dirs  = 'C:/temp/吕思源/10/'
 fileutil = FileUtil()
-list = []
+filedict = {}
 for i in range(1,10):
     path = dirs + str(i) + '.txt'
     content = "你好" + str(i)
-    fileutil.file_write(path, content)
+    filedict[path] = content
+    fileutil.file_write_batch(filedict)

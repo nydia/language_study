@@ -14,6 +14,11 @@ class FileUtil:
         f = open(filepath, 'w+')
         f.write(content)
         f.close()
+    def file_write_batch(self,filedict): # 批量对多个文件写入不同内容，参数为字典
+        for filepath in filedict:
+            f = open(filepath, 'w+')
+            f.write(filedict[filepath])
+            f.close()
     def file_read_content(self,filepath): # 使用 with 语句来安全地打开和关闭文件
         with open(filepath, 'r') as file:
             content = file.read()
