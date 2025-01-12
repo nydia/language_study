@@ -14,7 +14,7 @@ if __name__ == '__main__':
     header_format = '%-*s%*s'
     format        = '%-*s%*.2f'
     
-    print '=' * width
+    # print '=' * width
     
     print header_format % (item_width, 'Item', price_width, 'Price')
     
