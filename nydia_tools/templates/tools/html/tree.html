@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 树形结构</title>
+    <style>
+        /* 树形结构的通用样式 */
+     .tree {
+            list-style: none;
+            padding-left: 0;
+            font-family: Arial, sans-serif;
+        }
+     .tree li {
+            position: relative;
+            margin: 0;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 30px;
+        }
+     .tree li::before,
+     .tree li::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            border-color: #ccc;
+        }
+     .tree li::before {
+            top: 0;
+            bottom: 50%;
+            border-left: 1px solid;
+        }
+     .tree li::after {
+            top: 50%;
+            width: 15px;
+            border-top: 1px solid;
+        }
+     .tree li:last-child::before {
+            height: 50%;
+        }
+     .tree-node {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+     .tree-node:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+     .tree-node.expanded::after {
+            /*content: '▼';*/
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 13%;
+            transform: translateY(-50%);
+        }
+     .tree-node.collapsed::after {
+            content: '▶';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+     .tree-children {
+            display: none;
+            padding-left: 20px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease;
+        }
+     .tree-children.expanded {
+            display: block;
+            max-height: 1000px; /* 可根据实际情况调整 */
+        }
+     .tree-line {
+            position: absolute;
+            left: 15px;
+            top: 0;
+            height: 100%;
+            width: 20px;
+        }
+     .tree-line svg {
+            width: 100%;
+            height: 100%;
+        }
+     .tree-line path {
+            stroke: #ccc;
+            stroke-width: 1px;
+            fill: none;
+        }
+    </style>
+    <script>
+        // 示例 JSON 数据
+        const jsonData = {
+            "name": "Root",
+            "children": [
+                {
+                    "name": "Child 1",
+                    "children": [
+                        {"name": "Grandchild 1.1"},
+                        {"name": "Grandchild 1.2"}
+                    ]
+                },
+                {"name": "Child 2"},
+                {
+                    "name": "Child 3",
+                    "children": [
+                        {"name": "Grandchild 3.1", "special": true},
+                        {"name": "Grandchild 3.2"},
+                        {"name": "Grandchild 3.3"}
+                    ]
+                }
+            ]
+        };
+
+        // 递归生成树形结构的函数
+        function generateTree(data, parent, level = 0) {
+            const ul = document.createElement('ul');
+            ul.classList.add('tree');
+            parent.appendChild(ul);
+            data.forEach(item => {
+                const li = document.createElement('li');
+                const span = document.createElement('span');
+                span.classList.add('tree-node');
+                span.textContent = item.name;
+                li.appendChild(span);
+                ul.appendChild(li);
+                if (item.children && item.children.length > 0) {
+                    const childrenDiv = document.createElement('div');
+                    childrenDiv.classList.add('tree-children');
+                    li.appendChild(childrenDiv);
+                    // 若为第一层节点，添加 expanded 类使其默认展开
+                    if (level === 0) {
+                        span.classList.add('expanded');
+                        childrenDiv.classList.add('expanded');
+                    }
+                    generateTree(item.children, childrenDiv, level + 1);
+                }
+            });
+        }
+
+        // 优化后的节点点击事件处理函数
+        function handleNodeClick(event) {
+            const node = event.target.closest('.tree-node');
+            if (!node) return;
+            const childrenDiv = node.nextElementSibling;
+            if (childrenDiv && childrenDiv.classList.contains('tree-children')) {
+                node.classList.toggle('expanded');
+                if (node.classList.contains('expanded')) {
+                    childrenDiv.classList.add('expanded');
+                    let totalHeight = 0;
+                    childrenDiv.childNodes.forEach(child => {
+                        totalHeight += child.offsetHeight;
+                    });
+                    childrenDiv.style.maxHeight = `${totalHeight}px`;
+                } else {
+                    childrenDiv.classList.remove('expanded');
+                    childrenDiv.style.maxHeight = '0';
+                }
+            }
+        }
+
+        // 处理键盘事件
+        function handleKeyDown(event) {
+            const focusedNode = document.activeElement.closest('.tree-node');
+            if (!focusedNode) return;
+            const nodes = Array.from(document.querySelectorAll('.tree-node'));
+            const index = nodes.indexOf(focusedNode);
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    if (index < nodes.length - 1) {
+                        nodes[index + 1].focus();
+                    }
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    if (index > 0) {
+                        nodes[index - 1].focus();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    if (focusedNode.classList.contains('expanded')) {
+                        handleNodeClick({ target: focusedNode });
+                    }
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    if (focusedNode.classList.contains('collapsed')) {
+                        handleNodeClick({ target: focusedNode });
+                    }
+                    break;
+            }
+        }
+
+        // 页面加载时初始化树形结构和事件绑定
+        window.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('tree-container');
+            generateTree([jsonData], container);
+            container.addEventListener('click', (event) => {
+                if (event.target.closest('.tree-node')) {
+                    handleNodeClick(event);
+                }
+            });
+            container.addEventListener('keydown', handleKeyDown);
+        });
+    </script>
+</head>
+<body>
+    <div id="tree-container" tabindex="0"></div>
+</body>
+</html>

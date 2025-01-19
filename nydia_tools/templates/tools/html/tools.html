@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.aith.top/myfiles/assets/myicon.png" rel="shortcut icon">
+    <title>Nydia工具</title>
+
+    
+    <script src="../../../static/js/custom/page.js" ></script>
+    <script src="../../../static/js/custom/util_time.js" ></script>
+    <script src="../../../static/js/custom/util_common.js" ></script>
+
+
+    <style>
+        /* 通用样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* 容器样式 */
+      .container {
+            display: flex;
+            height: 100vh; /* 占满视口高度，避免滚动条 */
+        }
+        /* 左侧部分样式 */
+      .left {
+            flex: 0 0 20%;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: top;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* 左侧部分中的标题样式 */
+      .left h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        /* 左侧部分中的段落样式 */
+      .left p {
+            color: #555;
+            line-height: 1.5;
+            text-align: center;
+        }
+        /* 左侧部分中的图片样式 */
+      .left img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        /* 右侧部分样式 */
+      .right {
+            flex: 0 0 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: top;
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* 当内容超出时出现垂直滚动条 */
+        }
+        /* 右侧部分中的标题样式 */
+      .right h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        /* 右侧部分中的列表样式 */
+      .right ul {
+            list-style-type: none;
+            padding: 0;
+        }
+      .right ul li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        /* 右侧部分中的按钮样式 */
+      .right button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+      .right button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <link rel="stylesheet" href="../../../static/css/custom/tree.css" type="text/css">
+    <script src="../../../static/js/custom/util_tree.js" ></script>
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+          <div id="tree-container"></div>
+        </div>
+        <div class="right">
+            <h2>列表</h2>
+            <ul>
+                <li>列表项 1</li>
+                <li>列表项 2</li>
+                <li>列表项 3</li>
+                <li>列表项 1</li>
+                <li>列表项 2</li>
+                <li>列表项 3</li>
+            </ul>
+            <button>点击我</button>
+        </div>
+    </div>
+</body>
+</html>

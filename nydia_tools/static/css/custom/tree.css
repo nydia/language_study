@@ -1,0 +1,86 @@
+ /* 树形结构的通用样式 */
+ .tree {
+    list-style: none;
+    padding-left: 0;
+    font-family: Arial, sans-serif;
+}
+.tree li {
+    position: relative;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+}
+.tree li::before,
+.tree li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    border-color: #ccc;
+}
+.tree li::before {
+    top: 0;
+    bottom: 50%;
+    border-left: 1px solid;
+}
+.tree li::after {
+    top: 50%;
+    width: 15px;
+    border-top: 1px solid;
+}
+.tree li:last-child::before {
+    height: 50%;
+}
+.tree-node {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.tree-node:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.tree-node.expanded::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.tree-node.collapsed::after {
+    /* content: '▶'; */
+    content: '▶';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.tree-children {
+    display: none; /* 初始时隐藏子节点 */
+    padding-left: 20px;
+}
+.tree-children.expanded {
+    display: block; /* 展开时显示子节点 */
+}
+.tree-line {
+    position: absolute;
+    left: 15px;
+    top: 0;
+    height: 100%;
+    width: 20px;
+}
+.tree-line svg {
+    width: 100%;
+    height: 100%;
+}
+.tree-line path {
+    stroke: #ccc;
+    stroke-width: 1px;
+    fill: none;
+}
