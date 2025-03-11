@@ -70,6 +70,7 @@ python3.11 manage.py runserver 0.0.0.0:8000 &
 6. ocr页面 http://127.0.0.1:8000/ocrs/ocr
 7. orc识别接口 http://127.0.0.1:8000/ocrs/doocr
 8. 工具首页 http://127.0.0.1:8000/tools/tools_index.html
+9. 工具首页 http://www.aith.top/t
 
 
 管理页面：
