@@ -22,6 +22,14 @@
 - sub_views views拆分出来的子页面
 
 
+# 创建虚拟环境
+## 创建
+python3 -m venv venv3
+## 倒入包
+cd 到vnev3的bin目录下执行
+./pip3 install -r requirements-deploy-20240421.txt
+
+
 # 需要加载的包
 
 ## 初始化包的方式
@@ -30,6 +38,9 @@
 - 加速的方式：
 /opt/soft/Python3.11.4/bin/pip3.11 install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade opencv-python==4.10.0.82
 /opt/soft/Python3.11.4/bin/pip3.11 install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python-headless
+
+## django(在虚拟环境执行)
+./pip3 install Django==5.0.1
 
 ## 七牛云
 pip3 install qiniu
