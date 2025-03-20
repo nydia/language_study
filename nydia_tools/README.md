@@ -25,9 +25,11 @@
 # 创建虚拟环境
 ## 创建
 python3 -m venv venv3
+## 切到虚拟环境
+source /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/venv3/bin/activate
 ## 倒入包
 cd 到vnev3的bin目录下执行
-./pip3 install -r requirements-deploy-20240421.txt
+pip3 install -r /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/requirements/requirements-deploy-python3.13.txt
 
 
 # 需要加载的包
@@ -59,6 +61,9 @@ pip install openai
 
 # 本地启动
 python manage.py runserver
+或者 
+python3 manage.py runserver
+
 
 # docker内部启动
 ## 1. 通过宿主机映射到容器内部的python启动
