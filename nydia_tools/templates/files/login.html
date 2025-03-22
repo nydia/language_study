@@ -1,87 +1,130 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>{{page_title}}</title>
-{% load static %}
-<!-- nginx用80代理可能访问不了这个本地js，可以用在线js-->
-<!--<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>-->
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<style>
-#header {
-    background-color:black;
-    color:white;
-    text-align:center;
-    padding:5px;
-}
-#nav {
-    line-height:30px;
-    /*background-color:#eeeeee;*/
-    height:550px;
-    width:200px;
-    float:left;
-    padding:5px;
-}
-#section {
-    width:350px;
-    float:left;
-    padding:100px; 
-}
-#footer {
-    background-color:black;
-    color:white;
-    clear:both;
-    text-align:center;
-    padding:5px; 
-    position:fixed; bottom:0;
-    width: 100%;
-}
-img[src=""],img:not([src]){
-    opacity:0;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>{{page_title}}</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        #header {
+            background-color: #2c3e50;
+            color: #ecf0f1; /* 调整头部文字颜色为浅色 */
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #header h1 {
+            font-size: 24px; /* 减小字体大小 */
+            line-height: 1.2; /* 调整行高 */
+            margin: 0; /* 去除默认的外边距 */
+        }
+
+        #nav {
+            line-height: 30px;
+            height: 100vh;
+            width: 200px;
+            float: left;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        #section {
+            width: 400px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            float: none;
+        }
+
+        #footer {
+            background-color: #2c3e50;
+            color: white;
+            clear: both;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        img[src=""],
+        img:not([src]) {
+            opacity: 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="button"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="button"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
+
 <body>
-	<div id="header">
-		<h1>文件上传</h1>
-	</div>
-	<div id="nav">
-	</div>
-	<div id="section">
-		<form method="post" onclick="return true" >
-			<input type="text" name="uname" id="uname" style="width: 300px;"/>
-            <input type="text" name="upass" id="upass" style="width: 300px;"/>
-            <input type="button" value="登录" onclick ="login()"/>
-		</form>
-	</div>
-	<div id="footer">{{copyright}}</div>
-	
-	<script type="text/javascript">
-       
-        function login(){
+    <div id="header">
+        <h1>文件上传</h1>
+    </div>
+    <div id="nav">
+    </div>
+    <div id="section">
+        <form method="post" onclick="return true">
+            <input type="text" name="uname" id="uname" placeholder="用户名">
+            <input type="text" name="upass" id="upass" placeholder="密码">
+            <input type="button" value="登录" onclick="login()">
+        </form>
+    </div>
+    <div id="footer">{{copyright}}</div>
+
+    <script type="text/javascript">
+        function login() {
             var _uname = $("#uname").val()
             var _upass = $("#upass").val()
-            if(_uname === '' || _uname === undefined || _upass === '' || _upass === undefined){
+            if (_uname === '' || _uname === undefined || _upass === '' || _upass === undefined) {
                 alert("请输入用户名密码");
                 return false;
-
             } else {
                 $.ajax({
                     type: 'POST',
-                    //url: '/files/user_login',
                     url: 'user_login',
                     data: {
                         uname: _uname,
                         upass: _upass
                     },
-                    success: function(result){
-                        var data = JSON.stringify(result); 
+                    success: function (result) {
+                        var data = JSON.stringify(result);
                         console.log(data);
-                        if(result.status != 'success'){
+                        if (result.status != 'success') {
                             alert("登录密码或用户名错误")
                         } else {
-                            //window.location.href="/files/file_upload_page";
-                            window.location.href="file_upload_page";
+                            window.location.href = "file_upload_page";
                         }
                     },
                     error: function () {
@@ -90,8 +133,8 @@ img[src=""],img:not([src]){
                     dataType: "json"
                 });
             }
-            
         }
-	</script>
+    </script>
 </body>
+
 </html>

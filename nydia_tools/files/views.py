@@ -13,13 +13,17 @@ from .utils import file_upload_base
 from .utils import user_utils
 from .utils import path_utils
 from .utils import str_utils
+from .utils import file_constants
+from .utils.file_enum import UploadTypeEnum
+from .utils.file_enum import StorageTypeEnum
+from .forms import FileUploadForm
 
 # Create your views here.
 
 # 上下文
-url_prefix = "http://127.0.0.1/"
-page_title = "file upload"
-copyright = "Copyright © 2024-2024 tools"
+url_prefix = "http://aith.top/t"
+page_title = "File Upload"
+copyright = "Copyright © 2024-2025 tools"
 context = {}
 context['page_title'] = page_title
 context['copyright'] = copyright
@@ -29,9 +33,42 @@ context['url_prefix'] = url_prefix
 def file_upload_page(request):    
     if bool(user_utils.check_user()) == False:
         return render(request, "files/login.html", context, None, None, None)
-    return render(request, "files/upload.html", context, None, None, None)
+    
+    if file_constants.UPLOAD_TYPE == UploadTypeEnum.FORM:
+       return render(request, "files/upload_by_form.html", context, None, None, None)
+    elif file_constants.UPLOAD_TYPE == UploadTypeEnum.BASE64:
+        return render(request, "files/upload_by_base64.html", context, None, None, None)
+    else:
+       return render(request, "files/index.html", context, None, None, None)
+    
 
 def file_upload(request):
+    if file_constants.UPLOAD_TYPE == UploadTypeEnum.FORM:
+       return file_upload_by_form(request)
+    elif file_constants.UPLOAD_TYPE == UploadTypeEnum.BASE64:
+       return file_upload_by_base64(request)
+    else:
+       return JsonResponse({'status': 'success','img_path': '上传失败'})
+
+def file_upload_by_form(request):
+    img_path = file_upload_base.upload_by_form('', '') 
+    
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            print("文件名称：" + file.name)
+            # 上传文件到 OSS或者gitee等服务器
+            try:
+                pass
+            except Exception as e:
+                print(f"上传文件时发生错误: {e}")
+    else:
+        form = FileUploadForm()
+    return render(request, 'files/upload_by_form.html', {'form': form})    
+    #return JsonResponse({'status': 'success','img_path': img_path})
+
+def file_upload_by_base64(request):
     if bool(user_utils.check_user()) == False:
         return render(request, "files/login.html", context, None, None, None)    
     
@@ -54,10 +91,10 @@ def file_upload(request):
     file.write(imgContent)
     file.close()
     
-    # 方式1： 根据txt文件里面的base64图片内容生成图片上传到七牛云
+    # 方式1： 根据txt文件里面的base64图片内容生成图片上传到云服务器（七牛云）
     #img_path = file_upload_base.upload_by_txt_path(path_txt, filePath) 
     
-    # 方式2： 根据base64图片内容生成图片上传到七牛云
+    # 方式2： 根据base64图片内容生成图片上传到云服务器（七牛云）
     img_path = file_upload_base.upload_by_base64_content(imgContent, filePath) 
 
     return JsonResponse({'status': 'success','img_path': img_path})
