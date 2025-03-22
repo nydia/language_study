@@ -2,6 +2,7 @@ import base64
 from django.shortcuts import render
 
 import json
+import os
 from django.core import serializers
 from django.shortcuts import render
 from django.template import loader
@@ -51,8 +52,7 @@ def file_upload(request):
        return JsonResponse({'status': 'success','img_path': '上传失败'})
 
 def file_upload_by_form(request):
-    img_path = file_upload_base.upload_by_form('', '') 
-    
+    file_path = ''
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -60,12 +60,12 @@ def file_upload_by_form(request):
             print("文件名称：" + file.name)
             # 上传文件到 OSS或者gitee等服务器
             try:
-                pass
+                file_path = file_upload_base.upload_by_form(file)
             except Exception as e:
                 print(f"上传文件时发生错误: {e}")
     else:
         form = FileUploadForm()
-    return render(request, 'files/upload_by_form.html', {'form': form})    
+    return render(request, 'files/upload_by_form.html', {'form': form, 'img_path': file_path})    
     #return JsonResponse({'status': 'success','img_path': img_path})
 
 def file_upload_by_base64(request):

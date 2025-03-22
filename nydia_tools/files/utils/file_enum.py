@@ -12,6 +12,8 @@ class UploadTypeEnum(Enum):
     FORM = 2
 
 class StorageTypeEnum(Enum):
+    # 本地
+    LOCAL = 0
     # gitee （调用PlatManager平台接口）
     GITEE = 1
     # 七牛
