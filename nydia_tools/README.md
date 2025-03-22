@@ -23,13 +23,24 @@
 
 
 # 创建虚拟环境
-## 创建
+
+## pyhon3.11 （推荐使用）
+### 创建
+python3 -m venv venv3.11
+### 切到虚拟环境
+source /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/venv3.11/bin/activate
+### 导入包
+cd 到vnev3.11的bin目录下执行
+pip3 install -r /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/requirements/requirements-deploy-python3.11.txt
+
+## pyhon3.13 (此项目使用3.13.2会有包不兼容)
+### 创建
 python3 -m venv venv3
-## 切到虚拟环境
+### 切到虚拟环境
 source /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/venv3/bin/activate
-## 倒入包
+### 导入包
 cd 到vnev3的bin目录下执行
-pip3 install -r /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/requirements/requirements-deploy-python3.13.txt
+pip3 install -r /Users/lvhuaqiang/workspace/study/project-self/language_study/nydia_tools/requirements/requirements-deploy-python3.11.txt
 
 
 # 需要加载的包
