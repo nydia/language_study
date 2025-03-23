@@ -8,8 +8,8 @@
     <style>
         /* 全局样式 */
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f4f7fa;
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,57 +20,81 @@
 
         /* 表单容器样式 */
         form {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            width: 60%;
-            max-width: 800px;
+            background-color: #ffffff;
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 65%;
+            max-width: 850px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        form::before {
+            content: "";
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 123, 255, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+            transition: all 0.6s ease;
+        }
+
+        form:hover::before {
+            top: -100px;
+            left: -100px;
         }
 
         /* 标题样式 */
         h1 {
             color: #007BFF;
-            font-size: 32px;
-            margin-bottom: 20px;
+            font-size: 36px;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         /* 文件上传框样式 */
-        .file-upload-box {
+       .file-upload-box {
             border: 2px dashed #007BFF;
-            border-radius: 8px;
-            padding: 60px 20px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            padding: 80px 20px;
+            margin-bottom: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
             width: auto;
-            min-width: 400px;
+            min-width: 450px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .file-upload-box:hover {
+       .file-upload-box:hover {
             background-color: #e7f4ff;
             border-color: #0056b3;
+            transform: scale(1.02);
         }
 
-        .file-upload-box input[type="file"] {
+       .file-upload-box input[type="file"] {
             display: none;
         }
 
-        .file-upload-box label {
+       .file-upload-box label {
             color: #007BFF;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         /* 文件名显示文本样式 */
         #file-name-text {
-            font-size: 16px;
+            font-size: 18px;
             color: #6c757d;
         }
 
@@ -79,38 +103,111 @@
             background-color: #007BFF;
             color: #fff;
             border: none;
-            border-radius: 6px;
-            padding: 12px 20px;
-            font-size: 18px;
+            border-radius: 8px;
+            padding: 15px 25px;
+            font-size: 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
             width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-3px);
         }
 
         /* 上传结果显示区域样式 */
-        .upload-result {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #e7f4ff;
-            border: 1px solid #b6d7ff;
+       .upload-result {
+            margin-top: 35px;
+            padding: 30px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #e7f4ff 0%, #d6e9ff 100%);
+            border: none;
+            box-shadow: 0 12px 30px rgba(0, 123, 255, 0.15);
             width: auto;
-            min-width: 400px;
+            min-width: 450px;
             text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        .upload-result div {
-            margin-bottom: 8px;
-            font-size: 16px;
+       .upload-result::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 20px solid #e7f4ff;
         }
 
-        .upload-result div:first-child {
-            font-weight: 600;
+       .upload-result:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px rgba(0, 123, 255, 0.2);
+        }
+
+       .upload-result div {
+            margin-bottom: 15px;
+            font-size: 12px; /* 调整上传结果区域内文字大小 */
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+        }
+
+       .upload-result div:first-child {
+            font-weight: 700;
+            color: #0056b3;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+        }
+
+       .upload-result div:not(:first-child)::before {
+            content: "📄";
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+       .upload-result div:nth-child(2) {
             color: #007BFF;
+        }
+
+       .upload-result div:nth-child(3) {
+            color: #28a745;
+        }
+
+       .upload-result div:nth-child(4) {
+            color: #dc3545;
+        }
+
+        /* 复制按钮样式 */
+       .copy-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            margin-left: 5px;
+            cursor: pointer;
+            font-size: 12px; /* 调整复制按钮文字大小 */
+            transition: background-color 0.3s ease;
+            width: 60px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+       .copy-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -127,10 +224,10 @@
         <button type="submit">上传</button>
         {% if upload_result_flag %}
         <div class="upload-result">
-            上传图片结果：<span>{{ upload_result_flag }}</span>
-            <div>图片路径： {{ img_path }} </div>
-            <div>md图片链接: {{ md_link }} </div>
-            <div>上传错误信息: {{ errormsg }} </div>
+            <div id="upload_result_flag">上传图片结果：{{ upload_result_flag }}</div>
+            <div>图片路径：<span id="img_path">{{ img_path }}</span><button class="copy-btn" onclick="copyText('img_path')">复制</button></div>
+            <div>md图片链接: <span id="md_link">{{ md_link }}</span><button class="copy-btn" onclick="copyText('md_link')">复制</button></div>
+            <div>上传错误信息: {{ errormsg }}</div>
         </div>
         {% endif %}
     </form>
@@ -143,6 +240,18 @@
             } else {
                 fileNameText.textContent = '或者直接将文件拖到此处';
             }
+        }
+
+        function copyText(id) {
+            const element = document.getElementById(id);
+            const text = element.textContent;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('已复制: ' + text);
         }
     </script>
 </body>
