@@ -101,6 +101,9 @@ loguru==0.7.2
 opencv-python==4.10.0.82
 opencv-python-headless==4.10.0.84
 django-bootstrap4==24.4
+django-bootstrap4==24.4
+django-react-components==0.1.8a0
+django-webpack-loader==3.1.1
 numpy==1.25.2
 pandas==2.1.0
 pyzmq==25.1.1

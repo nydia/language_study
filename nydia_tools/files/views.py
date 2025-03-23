@@ -53,6 +53,7 @@ def file_upload(request):
 
 def file_upload_by_form(request):
     file_path = ''
+    context_resp = {}
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -63,9 +64,15 @@ def file_upload_by_form(request):
                 file_path = file_upload_base.upload_by_form(file)
             except Exception as e:
                 print(f"上传文件时发生错误: {e}")
+                context_resp['errormsg'] = e
     else:
-        form = FileUploadForm()
-    return render(request, 'files/upload_by_form.html', {'form': form, 'img_path': file_path})    
+        form = FileUploadForm()    
+    context_resp['form'] = form
+    context_resp['upload_result_flag'] = 'true'
+    context_resp['img_path'] = file_path
+    context_resp['md_link'] = '![alt图片]('+file_path+')'
+    return render(request, 'files/upload_by_form.html', context_resp)
+    #return render(request, 'files/upload_by_form.html', {'form': form, 'img_path': file_path})    
     #return JsonResponse({'status': 'success','img_path': img_path})
 
 def file_upload_by_base64(request):

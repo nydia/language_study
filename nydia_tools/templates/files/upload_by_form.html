@@ -3,43 +3,58 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文件上传</title>
     <style>
+        /* 全局样式 */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f7fa;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-        }
-
-        h1 {
             color: #333;
-            text-align: center;
-            margin-bottom: 20px;
         }
 
+        /* 表单容器样式 */
         form {
             background-color: #fff;
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            max-width: 800px;
+            text-align: center;
         }
 
+        /* 标题样式 */
+        h1 {
+            color: #007BFF;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* 文件上传框样式 */
         .file-upload-box {
-            border: 2px dashed #ccc;
+            border: 2px dashed #007BFF;
             border-radius: 8px;
-            padding: 40px 20px;
-            text-align: center;
+            padding: 60px 20px;
             margin-bottom: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            width: auto;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .file-upload-box:hover {
-            border-color: #007BFF;
+            background-color: #e7f4ff;
+            border-color: #0056b3;
         }
 
         .file-upload-box input[type="file"] {
@@ -48,22 +63,54 @@
 
         .file-upload-box label {
             color: #007BFF;
-            text-decoration: underline;
-            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
+        /* 文件名显示文本样式 */
+        #file-name-text {
+            font-size: 16px;
+            color: #6c757d;
+        }
+
+        /* 上传按钮样式 */
         button {
-            width: 100%;
-            padding: 10px;
             background-color: #007BFF;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 18px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
         }
 
         button:hover {
             background-color: #0056b3;
+        }
+
+        /* 上传结果显示区域样式 */
+        .upload-result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #e7f4ff;
+            border: 1px solid #b6d7ff;
+            width: auto;
+            min-width: 400px;
+            text-align: left;
+        }
+
+        .upload-result div {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .upload-result div:first-child {
+            font-weight: 600;
+            color: #007BFF;
         }
     </style>
 </head>
@@ -78,6 +125,14 @@
             <p id="file-name-text">或者直接将文件拖到此处</p>
         </div>
         <button type="submit">上传</button>
+        {% if upload_result_flag %}
+        <div class="upload-result">
+            上传图片结果：<span>{{ upload_result_flag }}</span>
+            <div>图片路径： {{ img_path }} </div>
+            <div>md图片链接: {{ md_link }} </div>
+            <div>上传错误信息: {{ errormsg }} </div>
+        </div>
+        {% endif %}
     </form>
     <script>
         function showFileName() {
