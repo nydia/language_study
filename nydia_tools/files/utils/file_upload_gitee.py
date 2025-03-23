@@ -12,7 +12,7 @@ class FileUploadGitee:
         pass
     def upload(self,file):
         upload_url = file_constants.UPLOAD_GITEE_HOST
-        response = requests.post(upload_url, files={'file': file})
+        response = requests.post(upload_url, files={'file': file,'access_token': file_constants.UPLOAD_TOKEN})
 
         if response.status_code == 200:
             resp_json = json.loads(response.text)
