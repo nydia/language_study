@@ -153,7 +153,7 @@
 
        .upload-result div {
             margin-bottom: 15px;
-            font-size: 12px; /* 调整上传结果区域内文字大小 */
+            font-size: 12px;
             line-height: 1.6;
             display: flex;
             align-items: center;
@@ -197,7 +197,7 @@
             padding: 2px 6px;
             margin-left: 5px;
             cursor: pointer;
-            font-size: 12px; /* 调整复制按钮文字大小 */
+            font-size: 12px;
             transition: background-color 0.3s ease;
             width: 60px;
             height: 20px;
@@ -253,7 +253,18 @@
             document.body.removeChild(textarea);
             alert('已复制: ' + text);
         }
+
+        document.addEventListener('paste', function (e) {
+            const file = e.clipboardData && e.clipboardData.files && e.clipboardData.files[0];
+            if (file && file.type.match('image.*')) {
+                const fileInput = document.getElementById('file');
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                showFileName();
+            }
+        });
     </script>
 </body>
 
-</html>    
+</html>
