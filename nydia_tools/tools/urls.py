@@ -9,6 +9,7 @@ urlpatterns = [
     path('temp_file', views.temp_file, name='temp_file'),
     path('temp_file_upload', views.temp_file_upload, name='temp_file_upload'),
     path('printjs', views.printjs, name='printjs'),
+    path("tool_dynamics",views.tool_dynamics, name="tool_dynamics"),
 
     # vue
     path("toolindex2",views.tools_index2, name="tools_index2"),

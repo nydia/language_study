@@ -49,6 +49,11 @@ def printjs(request):
     context = {}
     return render(request, "tools/html/printjs.html", context, None, None, None)
 
+# 工具 - 动态url（新增的工具的入口）
+def tool_dynamics(request):
+    context = {}
+    return render(request, "tools/html/tool_dynamics.html", context, None, None, None)
+
 # 工具首页- 结合vue
 def tools_index2(request):
     # 从file获取url列表
