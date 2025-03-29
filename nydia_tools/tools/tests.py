@@ -1,6 +1,7 @@
 from django.test import TestCase
 from tools.utils.file_utils import file_util
 from tools.utils.watermark_utils import watermark_util
+import tools.utils.crawler_util
 
 # Create your tests here.
 
@@ -34,3 +35,22 @@ class ToolsTest(TestCase):
 class ToolsTest_watermark(TestCase):
     def test_remove_watermark(self):
         watermark_util.remove_watermark('C:/temp/test1.jpg','C:/temp/test2.jpg')
+
+ # 爬虫
+# python manage.py test tools.tests.ToolsTest_crawler_news
+class ToolsTest_crawler_news(TestCase):
+    # 获取新闻数据
+    news_data = tools.utils.crawler_util.get_latest_news()
+    
+    if news_data:
+        # 同时保存三种格式
+        tools.utils.crawler_util.save_to_file(news_data, format='txt')
+        #tools.utils.crawler_util.save_to_file(news_data, format='csv')
+        #tools.utils.crawler_util.save_to_file(news_data, format='json')
+        
+        # 打印前3条结果预览
+        print("\n最新新闻预览：")
+        for idx, news in enumerate(news_data[:3], 1):
+            print(f"{idx}. [{news['time']}] {news['title']}")
+    else:
+        print("没有获取到新闻数据")

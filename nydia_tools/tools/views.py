@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 # 工具首页
 def tools_index(request):
     context = {}
+    context['context_path'] = 'http://127.0.0.1:8000'
     return render(request, "tools/tools_index.html", context, None, None, None)
 
 # 去除水印页面
