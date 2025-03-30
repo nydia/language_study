@@ -43,14 +43,17 @@ class ToolsTest_crawler_news(TestCase):
     news_data = tools.utils.crawler_util.get_latest_news()
     
     if news_data:
-        # 同时保存三种格式
-        tools.utils.crawler_util.save_to_file(news_data, format='txt')
-        #tools.utils.crawler_util.save_to_file(news_data, format='csv')
-        #tools.utils.crawler_util.save_to_file(news_data, format='json')
+        # 示例：保存到不同目录（按需修改）
+        tools.utils.crawler_util.save_to_file(news_data, 
+                    save_dir='/Users/lvhuaqiang/myfile/news_data', 
+                    format='json')
         
-        # 打印前3条结果预览
-        print("\n最新新闻预览：")
-        for idx, news in enumerate(news_data[:3], 1):
-            print(f"{idx}. [{news['time']}] {news['title']}")
+        tools.utils.crawler_util.save_to_file(news_data,
+                    save_dir='/Users/lvhuaqiang/myfile/news_data',
+                    format='csv')
+        
+        tools.utils.crawler_util.save_to_file(news_data,
+                    save_dir='/Users/lvhuaqiang/myfile/news_data',
+                    format='txt')
     else:
         print("没有获取到新闻数据")

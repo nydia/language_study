@@ -8,10 +8,10 @@
     <style>
         /* 全局样式 */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f6f8;
             color: #333;
             line-height: 1.6;
             display: flex;
@@ -20,80 +20,115 @@
 
         /* 左侧菜单样式 */
        .left-menu {
-            width: 20%;
-            min-width: 200px;
-            background-color: white;
-            color: black;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            width: 220px;
+            background-color: #fff;
+            color: #333;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
 
        .left-menu ul {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
 
        .left-menu li {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
        .left-menu a {
-            color: black;
+            color: #333;
             text-decoration: none;
             font-size: 16px;
             display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
         }
 
        .left-menu a:hover {
-            background-color: #e0e0e0;
+            background-color: #e9f2ff;
+            color: #007BFF;
         }
 
         /* 右侧内容样式 */
        .right-content {
-            width: 80%;
-            padding: 40px 20px;
+            flex: 1;
             display: flex;
             flex-direction: column;
+            background-color: #f4f6f8;
+            padding: 30px;
         }
 
-        /* 标题栏样式 */
-       .header {
-            background-color: #007BFF;
-            color: white;
+        /* 搜索框样式 */
+       .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+
+       .search-box input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 16px;
+            padding: 0 15px;
+        }
+
+       .search-box button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+            font-size: 20px;
+        }
+
+        /* 统计信息样式 */
+       .stats {
             text-align: center;
-            padding: 30px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-       .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            color: #007BFF;
+            font-weight: 600;
+            font-size: 18px;
         }
 
         /* 工具列表容器样式 */
        .tool-list {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 0;
+            padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             grid-gap: 30px;
+            max-height: 600px;
+            overflow-y: auto;
         }
 
         /* 单个工具样式 */
        .tool-item {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
             padding: 25px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
        .tool-item::before {
@@ -103,15 +138,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 123, 255, 0.1);
+            background-color: rgba(0, 123, 255, 0.05);
             transform: scale(0);
             transition: transform 0.3s ease;
             z-index: -1;
         }
 
        .tool-item:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
         }
 
        .tool-item:hover::before {
@@ -122,13 +157,15 @@
        .tool-item h3 {
             color: #333;
             margin-top: 0;
-            font-size: 1.5em;
+            font-size: 1.3em;
+            font-weight: 600;
         }
 
         /* 工具描述样式 */
        .tool-item p {
             color: #666;
             margin-bottom: 20px;
+            font-size: 0.9em;
         }
 
         /* 工具链接样式 */
@@ -138,22 +175,44 @@
             color: white;
             text-decoration: none;
             padding: 12px 25px;
-            border-radius: 5px;
+            border-radius: 8px;
             transition: background-color 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+            font-size: 0.9em;
+            text-align: center;
         }
 
        .tool-item a:hover {
             background-color: #0056b3;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        /* 热门和限免标签样式 */
+       .hot-label,
+       .free-label {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #FF4500;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+       .free-label {
+            background-color: #FF9900;
         }
 
         /* 页脚样式 */
        .footer {
-            background-color: #333;
-            color: white;
+            background-color: #fff;
+            color: #333;
             text-align: center;
-            padding: 20px 0;
+            padding: 25px 0;
+            margin-top: auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -161,50 +220,400 @@
 <body>
     <div class="left-menu">
         <ul>
-            <li><a href="#" onclick="showContent('all-tools')">全部工具</a></li>
-            <li><a href="#" onclick="showContent('category1')">分类1</a></li>
-            <li><a href="#" onclick="showContent('category2')">分类2</a></li>
-            <!-- 可以继续添加更多菜单项 -->
+            <li><a href="#" onclick="showContent('all-tools')">全部</a></li>
+            <li><a href="#" onclick="showContent('image-tools')">图片工具</a></li>
+            <li><a href="#" onclick="showContent('pdf-tools')">PDF转换工具</a></li>
+            <li><a href="#" onclick="showContent('data-conversion-tools')">数据换算工具</a></li>
+            <li><a href="#" onclick="showContent('life-entertainment-tools')">生活娱乐工具</a></li>
+            <li><a href="#" onclick="showContent('education-tools')">教育工具</a></li>
+            <li><a href="#" onclick="showContent('text-tools')">文本工具</a></li>
+            <li><a href="#" onclick="showContent('document-conversion-tools')">文档转换工具</a></li>
+            <li><a href="#" onclick="showContent('development-tools')">开发工具</a></li>
+            <li><a href="#" onclick="showContent('video-tools')">视频工具</a></li>
         </ul>
     </div>
     <div class="right-content">
-        <div class="header">
-            <h1>生活工具集合</h1>
+        <div class="search-box">
+            <input type="text" placeholder="搜索工具">
+            <button>🔍</button>
         </div>
-        <div class="tool-list" id="all-tools">
-            <div class="tool-item">
-                <h3>垃圾分类查询</h3>
-                <p>垃圾分类查询工具是一款免费的工具，可以用来查询生活中的垃圾分类情况。这款工具提供了实时更新的垃圾分类，让用户更加清晰地了解垃圾分类的具体方法和要求，更好地理解和管理垃圾分类工作。</p>
-                <a href="#" target="_blank">使用工具</a>
-            </div>
-            <div class="tool-item">
-                <h3>搜狗百宝箱</h3>
-                <p>搜狗百宝箱，您的全能助手！集成日常工具、投资理财、个人信息管理、语言翻译、编码字符等功能，满足您生活和工作的多样需求。一站式解决方案，让复杂生活变得简单高效。搜狗百宝箱，智能生活，触手可及。</p>
-                <a href="#" target="_blank">使用工具</a>
-            </div>
-            <!-- 按照这样的格式继续添加其他工具 -->
+        <div class="stats">
+            工具箱已累计帮助了 <span>279053274</span> 人次
         </div>
-        <div class="tool-list" id="category1" style="display: none;">
-            <!-- 分类1的工具列表 -->
-            <div class="tool-item">
-                <h3>分类1工具1</h3>
-                <p>这是分类1的工具1描述。</p>
-                <a href="#" target="_blank">使用工具</a>
-            </div>
-        </div>
-        <div class="tool-list" id="category2" style="display: none;">
-            <!-- 分类2的工具列表 -->
-            <div class="tool-item">
-                <h3>分类2工具1</h3>
-                <p>这是分类2的工具1描述。</p>
-                <a href="#" target="_blank">使用工具</a>
-            </div>
+        <div id="tool-lists">
+            <div class="tool-list" id="all-tools"></div>
+            <div class="tool-list" id="image-tools" style="display: none;"></div>
+            <div class="tool-list" id="pdf-tools" style="display: none;"></div>
+            <div class="tool-list" id="data-conversion-tools" style="display: none;"></div>
+            <div class="tool-list" id="life-entertainment-tools" style="display: none;"></div>
+            <div class="tool-list" id="education-tools" style="display: none;"></div>
+            <div class="tool-list" id="text-tools" style="display: none;"></div>
+            <div class="tool-list" id="document-conversion-tools" style="display: none;"></div>
+            <div class="tool-list" id="development-tools" style="display: none;"></div>
+            <div class="tool-list" id="video-tools" style="display: none;"></div>
         </div>
         <div class="footer">
             <p>Copyright &copy; 2025 生活工具集合</p>
         </div>
     </div>
     <script>
+        // 工具数据
+        const tools = {
+            "all-tools": [
+                {
+                    name: "图片压缩",
+                    description: "图片压缩是一款轻量级的图像压缩工具，可在保证画质的前提下大幅减小图片文件大小。",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "证件照生成",
+                    description: "相片生成证件照工具是一款帮助用户快速将普通照片转换为标准证件照的工具。",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "身份证识别",
+                    description: "身份证识别工具是一种利用图片识别技术快速准确读取身份证信息的工具。",
+                    link: "#",
+                    label: "free"
+                },
+                {
+                    name: "PDF转Word",
+                    description: "轻松将PDF文件转换为可编辑的Word文档，保留原格式和内容。",
+                    link: "#"
+                },
+                {
+                    name: "PDF转Excel",
+                    description: "快速把PDF中的表格数据转换为Excel表格，方便数据处理。",
+                    link: "#"
+                },
+                {
+                    name: "房贷利率调整计算器",
+                    description: "根据各银行存量首套住房贷款利率调...",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "温度转换",
+                    description: "温度转换专为将不同温度单位之间进...",
+                    link: "#"
+                },
+                {
+                    name: "投资收益计算",
+                    description: "通过这款工具，您可以轻松输入投资...",
+                    link: "#"
+                },
+                {
+                    name: "五险一金计算",
+                    description: "五险一金计算是一款实用的在线工具...",
+                    link: "#"
+                },
+                {
+                    name: "进制转换",
+                    description: "进制转换是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "房贷计算",
+                    description: "房贷计算是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "数字大小写转换",
+                    description: "数字大写和小写是一款免费且开源的...",
+                    link: "#"
+                },
+                {
+                    name: "BMI计算",
+                    description: "BMI是一种常用的健康指标，通过体...",
+                    link: "#"
+                },
+                {
+                    name: "时间戳转换",
+                    description: "时间戳转换是一款实用的在线工具，...",
+                    link: "#"
+                },
+                {
+                    name: "日期计算",
+                    description: "日期计算是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "计算器",
+                    description: "计算器是一款功能强大、实用的计算...",
+                    link: "#"
+                },
+                {
+                    name: "长度转换",
+                    description: "长度转换是一款功能强大、实用的换...",
+                    link: "#"
+                },
+                {
+                    name: "字节数换算",
+                    description: "字节数换算工具可以帮助您在不同的...",
+                    link: "#"
+                },
+                {
+                    name: "硬盘分区",
+                    description: "硬盘分区工具可以帮助您对硬盘进行...",
+                    link: "#"
+                },
+                {
+                    name: "重量转换",
+                    description: "重量转换可实现千克、克、磅等多种重量单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "面积转换",
+                    description: "面积转换支持平方米、公顷、英亩等面积单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "体积转换",
+                    description: "体积转换可进行升、毫升、立方米等体积单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "货币换算",
+                    description: "货币换算能实时更新汇率，实现不同货币间的兑换计算。",
+                    link: "#"
+                },
+                {
+                    name: "垃圾分类查询",
+                    description: "可查询生活中各种垃圾的分类情况，帮助用户做好垃圾分类。",
+                    link: "#"
+                },
+                {
+                    name: "在线计算器",
+                    description: "具备基本运算和科学计算功能，满足日常学习和工作计算需求。",
+                    link: "#"
+                },
+                {
+                    name: "文本翻译",
+                    description: "支持多种语言的文本翻译，快速准确传达信息。",
+                    link: "#"
+                },
+                {
+                    name: "Word转PDF",
+                    description: "将Word文档转换为PDF格式，便于文件分享和保存。",
+                    link: "#"
+                },
+                {
+                    name: "代码格式化",
+                    description: "自动对代码进行格式化，提高代码可读性。",
+                    link: "#"
+                },
+                {
+                    name: "视频裁剪",
+                    description: "可对视频进行裁剪，截取所需片段。",
+                    link: "#"
+                }
+            ],
+            "image-tools": [
+                {
+                    name: "图片压缩",
+                    description: "图片压缩是一款轻量级的图像压缩工具，可在保证画质的前提下大幅减小图片文件大小。",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "证件照生成",
+                    description: "相片生成证件照工具是一款帮助用户快速将普通照片转换为标准证件照的工具。",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "身份证识别",
+                    description: "身份证识别工具是一种利用图片识别技术快速准确读取身份证信息的工具。",
+                    link: "#",
+                    label: "free"
+                }
+            ],
+            "pdf-tools": [
+                {
+                    name: "PDF转Word",
+                    description: "轻松将PDF文件转换为可编辑的Word文档，保留原格式和内容。",
+                    link: "#"
+                },
+                {
+                    name: "PDF转Excel",
+                    description: "快速把PDF中的表格数据转换为Excel表格，方便数据处理。",
+                    link: "#"
+                }
+            ],
+            "data-conversion-tools": [
+                {
+                    name: "房贷利率调整计算器",
+                    description: "根据各银行存量首套住房贷款利率调...",
+                    link: "#",
+                    label: "hot"
+                },
+                {
+                    name: "温度转换",
+                    description: "温度转换专为将不同温度单位之间进...",
+                    link: "#"
+                },
+                {
+                    name: "投资收益计算",
+                    description: "通过这款工具，您可以轻松输入投资...",
+                    link: "#"
+                },
+                {
+                    name: "五险一金计算",
+                    description: "五险一金计算是一款实用的在线工具...",
+                    link: "#"
+                },
+                {
+                    name: "进制转换",
+                    description: "进制转换是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "房贷计算",
+                    description: "房贷计算是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "数字大小写转换",
+                    description: "数字大写和小写是一款免费且开源的...",
+                    link: "#"
+                },
+                {
+                    name: "BMI计算",
+                    description: "BMI是一种常用的健康指标，通过体...",
+                    link: "#"
+                },
+                {
+                    name: "时间戳转换",
+                    description: "时间戳转换是一款实用的在线工具，...",
+                    link: "#"
+                },
+                {
+                    name: "日期计算",
+                    description: "日期计算是一款实用的在线工具，专...",
+                    link: "#"
+                },
+                {
+                    name: "计算器",
+                    description: "计算器是一款功能强大、实用的计算...",
+                    link: "#"
+                },
+                {
+                    name: "长度转换",
+                    description: "长度转换是一款功能强大、实用的换...",
+                    link: "#"
+                },
+                {
+                    name: "字节数换算",
+                    description: "字节数换算工具可以帮助您在不同的...",
+                    link: "#"
+                },
+                {
+                    name: "硬盘分区",
+                    description: "硬盘分区工具可以帮助您对硬盘进行...",
+                    link: "#"
+                },
+                {
+                    name: "重量转换",
+                    description: "重量转换可实现千克、克、磅等多种重量单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "面积转换",
+                    description: "面积转换支持平方米、公顷、英亩等面积单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "体积转换",
+                    description: "体积转换可进行升、毫升、立方米等体积单位的换算。",
+                    link: "#"
+                },
+                {
+                    name: "货币换算",
+                    description: "货币换算能实时更新汇率，实现不同货币间的兑换计算。",
+                    link: "#"
+                }
+            ],
+            "life-entertainment-tools": [
+                {
+                    name: "垃圾分类查询",
+                    description: "可查询生活中各种垃圾的分类情况，帮助用户做好垃圾分类。",
+                    link: "#"
+                }
+            ],
+            "education-tools": [
+                {
+                    name: "在线计算器",
+                    description: "具备基本运算和科学计算功能，满足日常学习和工作计算需求。",
+                    link: "#"
+                }
+            ],
+            "text-tools": [
+                {
+                    name: "文本翻译",
+                    description: "支持多种语言的文本翻译，快速准确传达信息。",
+                    link: "#"
+                }
+            ],
+            "document-conversion-tools": [
+                {
+                    name: "Word转PDF",
+                    description: "将Word文档转换为PDF格式，便于文件分享和保存。",
+                    link: "#"
+                }
+            ],
+            "development-tools": [
+                {
+                    name: "代码格式化",
+                    description: "自动对代码进行格式化，提高代码可读性。",
+                    link: "#"
+                }
+            ],
+            "video-tools": [
+                {
+                    name: "视频裁剪",
+                    description: "可对视频进行裁剪，截取所需片段。",
+                    link: "#"
+                }
+            ]
+        };
+
+        // 渲染工具列表
+        function renderTools() {
+            for (const category in tools) {
+                const container = document.getElementById(category);
+                tools[category].forEach(tool => {
+                    const toolItem = document.createElement('div');
+                    toolItem.classList.add('tool-item');
+
+                    const toolName = document.createElement('h3');
+                    toolName.textContent = tool.name;
+                    toolItem.appendChild(toolName);
+
+                    const toolDescription = document.createElement('p');
+                    toolDescription.textContent = tool.description;
+                    toolItem.appendChild(toolDescription);
+
+                    const toolLink = document.createElement('a');
+                    toolLink.href = tool.link;
+                    toolLink.target = '_blank';
+                    toolLink.textContent = '使用工具';
+                    toolItem.appendChild(toolLink);
+
+                    if (tool.label) {
+                        const label = document.createElement('span');
+                        label.classList.add(tool.label === 'hot' ? 'hot-label' : 'free-label');
+                        label.textContent = tool.label === 'hot' ? 'HOT' : '限免';
+                        toolItem.appendChild(label);
+                    }
+
+                    container.appendChild(toolItem);
+                });
+            }
+        }
+
+        // 显示指定内容
         function showContent(id) {
             const sections = document.querySelectorAll('.right-content .tool-list');
             sections.forEach(section => {
@@ -213,6 +622,9 @@
             const targetSection = document.getElementById(id);
             targetSection.style.display = 'grid';
         }
+
+        // 初始化渲染
+        renderTools();
     </script>
 </body>
 

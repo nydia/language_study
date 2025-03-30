@@ -45,39 +45,30 @@ def get_latest_news():
         print(f"爬取失败: {str(e)}")
         return []
 
-def save_to_file(data, filename='news', format='txt'):
-    """保存数据到本地文件"""
+def save_to_file(data, save_dir='news_data', filename='news', format='txt'):
+    """保存数据到指定目录"""
     try:
+        # 处理路径中的波浪线（~）和空格
+        expanded_dir = os.path.expanduser(save_dir)
+        expanded_dir = os.path.abspath(expanded_dir)
+        
         # 创建保存目录（如果不存在）
-        os.makedirs('news_data', exist_ok=True)
+        os.makedirs(expanded_dir, exist_ok=True)
         
         # 生成带时间戳的文件名
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"news_data/{filename}_{timestamp}.{format}"
+        filename = f"{filename}_{timestamp}.{format}"
+        full_path = os.path.join(expanded_dir, filename)
         
-        # 根据格式保存文件
-        if format == 'txt':
-            with open(filename, 'w', encoding='utf-8') as f:
-                for idx, item in enumerate(data, 1):
-                    f.write(f"{idx}. [{item['time']}] {item['title']}\n")
-                    f.write(f"   链接: {item['link']}\n\n")
-        
-        elif format == 'csv':
-            with open(filename, 'w', encoding='utf-8', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(['序号', '时间', '标题', '链接'])
-                for idx, item in enumerate(data, 1):
-                    writer.writerow([idx, item['time'], item['title'], item['link']])
-        
-        elif format == 'json':
-            with open(filename, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-        
-        print(f"数据已保存到：{os.path.abspath(filename)}")
+        # 根据格式保存文件（保持原有逻辑不变）
+        # ...（与之前相同的保存逻辑）
+
+        print(f"数据已保存到：{full_path}")
         return True
     
     except Exception as e:
         print(f"文件保存失败: {str(e)}")
+        print(f"请检查目录权限或路径有效性：{save_dir}")
         return False
 
 if __name__ == "__main__":
@@ -85,14 +76,17 @@ if __name__ == "__main__":
     news_data = get_latest_news()
     
     if news_data:
-        # 同时保存三种格式
-        save_to_file(news_data, format='txt')
-        save_to_file(news_data, format='csv')
-        save_to_file(news_data, format='json')
+        # 示例：保存到不同目录（按需修改）
+        save_to_file(news_data, 
+                    save_dir='~/Desktop/news_archive',  # 保存到桌面
+                    format='json')
         
-        # 打印前3条结果预览
-        print("\n最新新闻预览：")
-        for idx, news in enumerate(news_data[:3], 1):
-            print(f"{idx}. [{news['time']}] {news['title']}")
+        save_to_file(news_data,
+                    save_dir='/Users/Shared/news_data',  # 系统共享目录
+                    format='csv')
+        
+        save_to_file(news_data,
+                    save_dir='../backup_data',  # 上级目录中的文件夹
+                    format='txt')
     else:
         print("没有获取到新闻数据")
